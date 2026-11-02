@@ -1,0 +1,2755 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NamiChordLabs (NCL) — Open first. Play together.</title>
+<meta name="description" content="NamiChordLabs (NCL) is a Yokohama technology company bringing the world's ideas into everyday life through AI, blockchain, and emerging technologies people love using. Open first. Play together.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="NamiChordLabs">
+<meta property="og:title" content="NamiChordLabs (NCL) — Open first. Play together.">
+<meta property="og:description" content="Inspired by Yokohama's international port and the Yokohama Jazz Promenade: AI, blockchain, and emerging technology built with people around the world.">
+<meta name="theme-color" content="#08111f">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%2308111f'/%3E%3Cg fill='none' stroke-width='2.8' stroke-linecap='round'%3E%3Cpath d='M6.4 13.5c2.3-3.4 4.5-3.4 6.8 0s4.5 3.4 6.8 0 4.5-3.4 6.8 0 4.5 3.4 6.8 0' stroke='%23e9b44c'/%3E%3Cpath d='M6.4 20c2.3-3.4 4.5-3.4 6.8 0s4.5 3.4 6.8 0 4.5-3.4 6.8 0 4.5 3.4 6.8 0' stroke='%2378c4c1'/%3E%3Cpath d='M6.4 26.5c2.3-3.4 4.5-3.4 6.8 0s4.5 3.4 6.8 0 4.5-3.4 6.8 0 4.5 3.4 6.8 0' stroke='%23f3eee5'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Manrope:wght@400;500;600;700&family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+Antique:wght@400;500;700&display=swap" rel="stylesheet">
+<script>
+  /* Pick the language before first paint so the page doesn't flash the wrong one */
+  (function () {
+    var r = document.documentElement, l = null;
+    r.classList.add('js');
+    try { l = localStorage.getItem('ncl-lang'); } catch (e) {}
+    if (!l) l = (navigator.language || '').toLowerCase().indexOf('ja') === 0 ? 'ja' : 'en';
+    if (l === 'ja') { r.classList.add('lang-ja'); r.lang = 'ja'; }
+  })();
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "NamiChordLabs",
+  "alternateName": "NCL",
+  "slogan": "Open first. Play together.",
+  "description": "A Yokohama technology company building AI, blockchain, and emerging-technology products with people around the world.",
+  "email": "yutosuzuki@namichordlabs.com",
+  "address": { "@type": "PostalAddress", "addressLocality": "Yokohama", "addressRegion": "Kanagawa", "addressCountry": "JP" }
+}
+</script>
+<style>
+  :root {
+    --night: #08111f;
+    --night-2: #0c1a2e;
+    --night-3: #132741;
+    --harbor: #1f5f8b;
+    --harbor-dark: #174a6d;
+    --brass: #e9b44c;
+    --brass-soft: #f1cf87;
+    --brass-ink: #8a6116;
+    --paper: #f7f3ec;
+    --paper-2: #efe8dc;
+    --card: #fffdf8;
+    --ink: #132033;
+    --ink-2: #2b3b52;
+    --muted: #5a6577;
+    --line: #e2d9c9;
+    --on-dark: #f3eee5;
+    --on-dark-muted: rgba(243, 238, 229, .74);
+    --line-dark: rgba(243, 238, 229, .13);
+
+    /* The five voices of the chord: root, 3rd, 5th, 7th, 9th */
+    --v0: #78c4c1;
+    --v1: #e9b44c;
+    --v2: #ec8b6b;
+    --v3: #a99cf0;
+    --v4: #8ec5f2;
+
+    --display: "Fraunces", "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", serif;
+    --sans: "Manrope", "Zen Kaku Gothic Antique", "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+    --max: 1160px;
+    --gutter: clamp(16px, 4vw, 40px);
+    --header: 70px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: var(--header); -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--ink);
+    background: var(--paper);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  img, svg, canvas { display: block; max-width: 100%; }
+  a { color: inherit; }
+  button { font: inherit; }
+  h1, h2, h3 { font-family: var(--display); font-weight: 600; line-height: 1.18; margin: 0; text-wrap: balance; font-optical-sizing: auto; }
+  p { margin: 0 0 1em; }
+  p:last-child { margin-bottom: 0; }
+  em { font-style: italic; }
+  ::selection { background: rgba(233, 180, 76, .35); }
+
+  /* Language toggle: .en / .ja blocks */
+  html.lang-ja .en { display: none !important; }
+  html:not(.lang-ja) .ja { display: none !important; }
+  html.lang-ja body { line-height: 1.95; font-size: 16px; }
+  html.lang-ja h1, html.lang-ja h2, html.lang-ja h3 { word-break: auto-phrase; line-height: 1.45; letter-spacing: .04em; font-feature-settings: "palt"; }
+  html.lang-ja .attn span, html.lang-ja .flow li, html.lang-ja .ticks li, html.lang-ja .timeline a > span, html.lang-ja .chip, html.lang-ja .btn, html.lang-ja .lead { word-break: auto-phrase; }
+  html.lang-ja em { font-style: normal; }
+
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+
+  .skip {
+    position: absolute; left: -9999px; top: 8px; z-index: 100;
+    background: var(--card); color: var(--ink); padding: 8px 14px; border-radius: 6px;
+  }
+  .skip:focus { left: 8px; }
+  :focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; border-radius: 4px; }
+
+  /* Small label above headings, with a wave mark */
+  .label {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin: 0 0 18px; font-size: 12.5px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--brass-ink);
+  }
+  .label::before {
+    content: ""; width: 26px; height: 8px; flex: none; background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 8'%3E%3Cpath d='M1 4c2-3 4-3 6 0s4 3 6 0 4-3 6 0 4 3 6 0' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 8'%3E%3Cpath d='M1 4c2-3 4-3 6 0s4 3 6 0 4-3 6 0 4 3 6 0' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+  html.lang-ja .label { letter-spacing: .14em; }
+  .dark .label { color: var(--brass-soft); }
+
+  .section { padding: clamp(84px, 11vw, 150px) 0; position: relative; }
+  .dark { background: var(--night); color: var(--on-dark); }
+  .section-head { display: grid; grid-template-columns: 1fr 1fr; gap: 28px clamp(40px, 6vw, 96px); align-items: end; margin-bottom: clamp(48px, 6vw, 76px); }
+  .section-head h2 { font-size: clamp(32px, 4.3vw, 54px); letter-spacing: -.012em; }
+  html.lang-ja .section-head h2 { font-size: clamp(27px, 3.4vw, 42px); }
+  .lead { font-size: clamp(17px, 1.5vw, 19px); color: var(--ink-2); margin: 0; }
+  .dark .lead { color: var(--on-dark-muted); }
+  .section-head.stack { grid-template-columns: 1fr; gap: 22px; }
+  .section-head.stack h2 { max-width: 980px; }
+  .section-head.stack .lead { max-width: 680px; }
+  @media (max-width: 900px) { .section-head { grid-template-columns: 1fr; } }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    min-height: 48px; padding: 12px 24px; border-radius: 999px;
+    font-size: 15px; font-weight: 600; letter-spacing: .02em; text-decoration: none; cursor: pointer;
+    border: 1px solid transparent; transition: background .2s, color .2s, border-color .2s, transform .2s;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-brass { background: var(--brass); color: #1b1407; }
+  .btn-brass:hover { background: var(--brass-soft); }
+  .btn-ghost { border-color: rgba(243, 238, 229, .4); color: var(--on-dark); background: transparent; }
+  .btn-ghost:hover { background: rgba(243, 238, 229, .1); border-color: rgba(243, 238, 229, .7); }
+  .btn-ink { background: var(--ink); color: var(--card); }
+  .btn-ink:hover { background: var(--harbor-dark); }
+  .btn-line { border-color: var(--ink); color: var(--ink); background: transparent; }
+  .btn-line:hover { background: var(--ink); color: var(--card); }
+  .btn svg { width: 18px; height: 18px; }
+
+  /* "Play the chord": the only thing on the site that makes sound, and only when pressed */
+  .play-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    min-height: 48px; padding: 8px 18px 8px 8px; border-radius: 999px; cursor: pointer;
+    background: rgba(243, 238, 229, .06); color: var(--on-dark); border: 1px solid rgba(243, 238, 229, .18);
+    font-size: 14.5px; font-weight: 600; letter-spacing: .02em; transition: background .2s, border-color .2s;
+  }
+  .play-btn:hover { background: rgba(243, 238, 229, .12); border-color: rgba(243, 238, 229, .4); }
+  .play-btn .pb-dots { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: rgba(8, 17, 31, .55); }
+  .play-btn .pb-dots svg { width: 20px; height: 20px; }
+  .play-btn small { font-weight: 500; opacity: .62; font-size: 12px; }
+
+  /* ---------- Header ---------- */
+  .site-header { position: fixed; inset: 0 0 auto 0; z-index: 50; transition: background .3s, box-shadow .3s; color: var(--on-dark); }
+  .site-header.scrolled {
+    background: rgba(8, 17, 31, .86);
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    box-shadow: 0 1px 0 rgba(243, 238, 229, .07);
+  }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: var(--header); }
+  .brand { display: flex; align-items: center; gap: 11px; text-decoration: none; }
+  .brand svg { width: 32px; height: 32px; }
+  .brand-name { font-family: var(--display); font-size: 21px; font-weight: 600; letter-spacing: -.005em; line-height: 1; }
+  .brand-name small { font-family: var(--sans); font-size: 10.5px; font-weight: 700; letter-spacing: .26em; margin-left: 6px; opacity: .72; vertical-align: 2px; }
+  .nav-links { display: flex; align-items: center; gap: 26px; list-style: none; margin: 0; padding: 0; }
+  .nav-links a { text-decoration: none; font-size: 14px; font-weight: 500; letter-spacing: .03em; opacity: .82; transition: opacity .2s; }
+  .nav-links a:hover { opacity: 1; }
+  .nav-links a.nav-cta { opacity: 1; color: var(--brass-soft); border-bottom: 1px solid rgba(241, 207, 135, .5); padding-bottom: 2px; }
+  .lang-btn {
+    color: var(--on-dark); background: transparent; border: 1px solid rgba(243, 238, 229, .38);
+    border-radius: 999px; padding: 5px 14px; font-size: 13px; cursor: pointer; letter-spacing: .04em;
+  }
+  .lang-btn:hover { background: rgba(243, 238, 229, .1); }
+  .menu-btn { display: none; background: none; border: 0; color: var(--on-dark); cursor: pointer; padding: 8px; margin-right: -8px; }
+  .menu-btn svg { width: 26px; height: 26px; }
+  @media (max-width: 1180px) {
+    .menu-btn { display: block; }
+    .nav-links {
+      position: absolute; top: var(--header); left: 0; right: 0;
+      flex-direction: column; align-items: flex-start; gap: 0;
+      background: rgba(8, 17, 31, .97); padding: 8px var(--gutter) 22px;
+      display: none; max-height: calc(100vh - var(--header)); overflow-y: auto;
+    }
+    .nav-links.open { display: flex; }
+    .nav-links li { width: 100%; }
+    .nav-links a { display: block; padding: 12px 0; font-size: 16px; }
+    .nav-links a.nav-cta { border-bottom: 0; padding-bottom: 12px; }
+    .nav-links .lang-li { padding-top: 10px; }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative; min-height: 100vh; min-height: 100svh; overflow: hidden; isolation: isolate;
+    color: var(--on-dark); cursor: pointer;
+    background:
+      radial-gradient(70% 45% at 78% 88%, rgba(233, 180, 76, .16), transparent 70%),
+      radial-gradient(60% 55% at 12% 0%, rgba(40, 84, 140, .34), transparent 65%),
+      linear-gradient(180deg, #050b16 0%, #091527 52%, #10233c 100%);
+    display: flex; flex-direction: column;
+  }
+  /* --py is the scroll position: the harbor drifts down slower than the page, the words lift away */
+  .hero canvas#sea { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; transform: translate3d(0, calc(var(--py, 0) * .32px), 0); }
+  .hero-inner {
+    position: relative; width: 100%; flex: 1;
+    display: flex; flex-direction: column; justify-content: center;
+    padding-top: calc(var(--header) + 28px); padding-bottom: var(--clear, 40vh);
+  }
+  .hero-copy { max-width: 640px; cursor: auto; transform: translate3d(0, calc(var(--py, 0) * -.18px), 0); opacity: calc(1 - var(--py, 0) / 760); }
+  .eyebrow {
+    display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center;
+    font-size: 12.5px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: var(--brass-soft); margin: 0 0 26px;
+  }
+  .eyebrow i { width: 4px; height: 4px; border-radius: 50%; background: currentColor; opacity: .6; }
+  .hero h1 {
+    font-size: clamp(44px, min(6.4vw, 10.5vh), 94px); font-weight: 500; letter-spacing: -.025em; line-height: 1.02;
+    font-variation-settings: "opsz" 144;
+  }
+  .hero h1 .line { display: block; }
+  .hero h1 em { color: var(--brass-soft); font-weight: 400; }
+  html.lang-ja .hero h1 { font-size: clamp(36px, min(5.4vw, 8.6vh), 76px); letter-spacing: .04em; line-height: 1.3; font-weight: 700; }
+
+  /* "together." starts in the five voice colours and settles into brass, then a wave draws itself underneath */
+  .hero h1 em.tune {
+    position: relative; display: inline-block; padding: 0 .1em .14em 0; margin: 0 -.1em -.14em 0;
+    background: linear-gradient(90deg, var(--v0) 0%, var(--v1) 11%, var(--v2) 22%, var(--v3) 33%, var(--v4) 44%, var(--brass-soft) 58%, var(--brass-soft) 100%);
+    background-size: 260% 100%; background-position: 100% 0;
+    -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  }
+  .hero h1 .tw { position: absolute; left: .02em; bottom: .02em; width: calc(100% - .16em); height: .2em; overflow: visible; pointer-events: none; }
+  .hero h1 .tw path { fill: none; stroke: var(--brass-soft); stroke-width: 2.4; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
+  html.lang-ja .hero h1 .tw { bottom: .06em; }
+
+  /* Entrance: words rise out of a blur one after another, then the rest follows */
+  html.js .hero .w {
+    display: inline-block; opacity: 0; transform: translateY(.42em) rotate(1.5deg); filter: blur(10px);
+    animation: wordIn 1s cubic-bezier(.2, .75, .2, 1) forwards; animation-delay: calc(.2s + var(--i, 0) * .12s);
+  }
+  html.js .hero h1 em.tune {
+    animation: wordIn 1s cubic-bezier(.2, .75, .2, 1) calc(.2s + var(--i, 0) * .12s) forwards, tune 3s ease-in-out .9s both;
+  }
+  /* The headline follows the two acts of the animation: the line being acted out is lit and underlined */
+  .hero h1 .k { position: relative; display: inline-block; padding-bottom: .14em; margin-bottom: -.14em; }
+  .hero h1 .k1 .tw { width: calc(100% - .06em); }
+  .hero h1 .l1, .hero h1 .l2 { transition: opacity .9s ease; }
+  .hero[data-act="open"] h1 .l2, .hero[data-act="play"] h1 .l1 { opacity: .4; }
+  html.js .hero h1 .k .tw path { stroke-dashoffset: 1; transition: stroke-dashoffset 1.2s cubic-bezier(.6, .1, .2, 1) .3s; }
+  html.js .hero[data-act="open"] h1 .k1 .tw path, html.js .hero[data-act="play"] h1 .k2 .tw path, html.js .hero[data-act="both"] h1 .k .tw path { stroke-dashoffset: 0; }
+  html.js .hero .rise { opacity: 0; transform: translateY(16px); animation: rise .9s cubic-bezier(.2, .75, .2, 1) forwards; animation-delay: var(--d, 0s); }
+  @keyframes wordIn { to { opacity: 1; transform: none; filter: blur(0); } }
+  @keyframes tune { from { background-position: 0% 0; } to { background-position: 100% 0; } }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+
+  .hero-sub { margin: 18px 0 0; font-family: var(--display); font-size: clamp(16px, 1.8vw, 21px); letter-spacing: .22em; color: rgba(243, 238, 229, .62); }
+  html.lang-ja .hero-sub { letter-spacing: .06em; font-style: italic; }
+  .hero-lead { max-width: 560px; margin: 28px 0 0; font-size: clamp(16.5px, 1.4vw, 18.5px); color: var(--on-dark-muted); }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; align-items: center; }
+
+  /* Captions beside the two symbols (placed by the script, and moved with the harbor as the page scrolls) */
+  .act-cap {
+    position: absolute; left: 0; top: 0; z-index: 1; margin: 0; pointer-events: none; text-align: center; white-space: nowrap;
+    transform: translate3d(calc(var(--x, -999px) - 50%), calc(var(--y, 0px) + var(--py, 0) * .32px), 0);
+    opacity: 0; transition: opacity .8s ease; text-shadow: 0 2px 16px rgba(5, 11, 22, .95), 0 0 4px rgba(5, 11, 22, .8);
+  }
+  .act-cap.show { opacity: 1; }
+  .cap-t { display: block; font-family: var(--display); font-style: italic; font-weight: 500; font-size: clamp(18px, 1.7vw, 24px); line-height: 1.2; color: var(--brass-soft); }
+  html.lang-ja .cap-t { font-style: normal; font-weight: 700; letter-spacing: .08em; font-size: clamp(16px, 1.5vw, 20px); }
+  .cap-t i { font-family: var(--sans); font-style: normal; font-weight: 700; font-size: 10.5px; letter-spacing: .2em; color: rgba(243, 238, 229, .55); margin-right: 10px; vertical-align: .35em; }
+  .cap-s { display: block; margin-top: 4px; font-size: 12.5px; letter-spacing: .04em; color: rgba(243, 238, 229, .8); }
+  @media (max-width: 760px) { .cap-s { font-size: 11.5px; } }
+
+  /* "Now playing": the chord the harbor is on, a scope of its waveform, and the sound switch */
+  .jam {
+    position: absolute; z-index: 2; bottom: clamp(14px, 3vh, 28px); right: max(16px, calc((100% - var(--max)) / 2 + var(--gutter)));
+    width: 320px; padding: 14px 16px; border-radius: 14px; cursor: auto;
+    background: rgba(8, 17, 31, .6); border: 1px solid rgba(243, 238, 229, .14);
+    -webkit-backdrop-filter: blur(12px) saturate(1.2); backdrop-filter: blur(12px) saturate(1.2);
+    box-shadow: 0 18px 40px -20px rgba(0, 0, 0, .7);
+    color: var(--on-dark); font-size: 13px;
+  }
+  .jam-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .jam-label { display: inline-flex; align-items: center; gap: 9px; font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--on-dark-muted); }
+  html.lang-ja .jam-label { letter-spacing: .08em; }
+  .beat { width: 7px; height: 7px; border-radius: 50%; background: var(--brass); }
+  .beat.on { animation: beatPulse .55s ease-out; }
+  @keyframes beatPulse {
+    0% { transform: scale(1.7); box-shadow: 0 0 0 0 rgba(233, 180, 76, .6); }
+    100% { transform: scale(1); box-shadow: 0 0 0 9px rgba(233, 180, 76, 0); }
+  }
+  .scope { width: 112px; height: 28px; }
+  .chords { list-style: none; margin: 10px 0 12px; padding: 0; display: flex; gap: 6px; }
+  .chords li {
+    flex: 1; text-align: center; padding: 7px 4px 8px; border-radius: 8px; border: 1px solid rgba(243, 238, 229, .1);
+    font-family: var(--display); font-style: italic; font-size: 19px; line-height: 1; color: rgba(243, 238, 229, .42);
+    transition: color .45s, background-color .45s, border-color .45s;
+  }
+  .chords sup { font-family: var(--sans); font-style: normal; font-weight: 700; font-size: .5em; vertical-align: .7em; margin-left: 1px; }
+  .chords li.on { color: var(--night); background: var(--brass-soft); border-color: var(--brass-soft); }
+  .jam-bottom { display: flex; align-items: center; gap: 12px; }
+  .sound-btn {
+    display: inline-flex; align-items: center; gap: 7px; flex: none;
+    padding: 7px 12px 7px 9px; border-radius: 999px; cursor: pointer;
+    border: 1px solid rgba(243, 238, 229, .3); background: transparent; color: var(--on-dark);
+    font-size: 13px; font-weight: 600; transition: background .2s, color .2s, border-color .2s;
+  }
+  .sound-btn:hover { background: rgba(243, 238, 229, .1); }
+  .sound-btn svg { width: 18px; height: 18px; }
+  .sound-btn .st { font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 2px 6px; border-radius: 999px; background: rgba(243, 238, 229, .14); }
+  .sound-btn .s-on, .sound-btn .ic-on { display: none; }
+  .sound-btn[aria-pressed="true"] { background: var(--brass); border-color: var(--brass); color: #1b1407; }
+  .sound-btn[aria-pressed="true"] .st { background: rgba(27, 20, 7, .14); }
+  .sound-btn[aria-pressed="true"] .s-on, .sound-btn[aria-pressed="true"] .ic-on { display: inline; }
+  .sound-btn[aria-pressed="true"] .s-off, .sound-btn[aria-pressed="true"] .ic-off { display: none; }
+  .jam-hint { font-size: 12px; line-height: 1.4; color: var(--on-dark-muted); }
+  @media (max-width: 760px) {
+    .jam { left: 16px; right: 16px; width: auto; bottom: 12px; padding: 10px 12px; }
+    .chords { margin: 8px 0 9px; }
+    .chords li { font-size: 16px; padding: 5px 4px 6px; }
+    .scope { width: 92px; height: 23px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero canvas#sea, .hero-copy { transform: none !important; opacity: 1 !important; }
+    html.js .hero .w, html.js .hero .rise, html.js .hero h1 em.tune { animation: none; opacity: 1; transform: none; filter: none; }
+    html.js .hero h1 .k .tw path { transition: none; }
+    .hero h1 .l1, .hero h1 .l2 { transition: none; }
+    .act-cap { transform: translate3d(calc(var(--x, -999px) - 50%), var(--y, 0px), 0); transition: none; }
+  }
+
+  /* ---------- Motto ---------- */
+  .motto { background: var(--paper); }
+  .motto-pair { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 36px); }
+  .motto-card {
+    position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: clamp(28px, 4vw, 52px); overflow: hidden;
+  }
+  .motto-card svg.mc-art { width: 100%; height: 92px; margin-bottom: 28px; }
+  .motto-card h3 { font-size: clamp(34px, 4vw, 52px); font-weight: 500; letter-spacing: -.02em; margin-bottom: 18px; font-variation-settings: "opsz" 144; }
+  .motto-card h3 em { color: var(--brass-ink); font-weight: 400; }
+  html.lang-ja .motto-card h3 { font-size: clamp(28px, 3vw, 38px); font-weight: 700; }
+  html.lang-ja .motto-card h3 em { color: var(--brass-ink); }
+  .motto-card p { color: var(--ink-2); }
+  .motto-card .mc-ja { font-family: var(--display); font-size: 15px; letter-spacing: .14em; color: var(--muted); margin: -8px 0 18px; }
+  .inspire {
+    display: grid; grid-template-columns: auto 1fr; gap: 20px 36px; align-items: center;
+    margin-top: clamp(28px, 4vw, 44px); padding: clamp(24px, 3vw, 34px) clamp(24px, 4vw, 52px);
+    border-radius: 10px; background: var(--night); color: var(--on-dark);
+  }
+  .inspire p { margin: 0; color: var(--on-dark-muted); max-width: 560px; }
+  .inspire p strong { color: var(--on-dark); font-weight: 600; }
+  .inspire-links { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 10px; padding: 9px 16px; border-radius: 999px;
+    border: 1px solid rgba(243, 238, 229, .22); text-decoration: none; font-size: 14px; font-weight: 600; color: var(--on-dark);
+    transition: background .2s, border-color .2s;
+  }
+  .chip:hover { background: rgba(243, 238, 229, .08); border-color: rgba(243, 238, 229, .45); }
+  .chip b { font-family: var(--display); font-style: italic; font-weight: 500; color: var(--brass-soft); font-size: 15px; }
+  .name-note {
+    display: grid; grid-template-columns: auto 1fr; gap: 18px 26px; align-items: start;
+    margin-top: clamp(28px, 4vw, 44px); padding-top: clamp(24px, 3vw, 32px); border-top: 1px solid var(--line);
+    color: var(--ink-2); font-size: 15.5px;
+  }
+  .name-note .kanji { font-family: "Shippori Mincho B1", serif; font-size: 44px; line-height: 1; color: var(--ink); }
+  .name-note h3 { font-size: 13px; font-family: var(--sans); font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--brass-ink); margin-bottom: 8px; }
+  .name-note p { max-width: 760px; }
+  @media (max-width: 860px) {
+    .motto-pair { grid-template-columns: 1fr; }
+    .inspire { grid-template-columns: 1fr; }
+    .inspire-links { justify-content: flex-start; }
+  }
+
+  /* ---------- Story ---------- */
+  .story { background: var(--card); }
+  .timeline {
+    position: relative; display: grid; grid-template-columns: repeat(4, 1fr); list-style: none; margin: 0 0 clamp(56px, 7vw, 96px); padding: 0;
+  }
+  .timeline::before {
+    content: ""; position: absolute; left: 0; right: 0; top: 7px; height: 10px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 10'%3E%3Cpath d='M0 5c5-5 10-5 10 0s5 5 10 0 5-5 10 0 5 5 10 0' fill='none' stroke='%23d5c9b3' stroke-width='1.5'/%3E%3C/svg%3E") repeat-x left center / 40px 10px;
+  }
+  .timeline li { position: relative; padding-top: 36px; }
+  .timeline li::before {
+    content: ""; position: absolute; top: 4px; left: 0; width: 16px; height: 16px; border-radius: 50%;
+    background: var(--card); border: 3px solid var(--brass);
+  }
+  .timeline li:last-child::before { background: var(--brass); }
+  .timeline a { text-decoration: none; display: block; }
+  .timeline b { display: block; font-family: var(--display); font-style: italic; font-weight: 500; font-size: clamp(24px, 2.6vw, 32px); line-height: 1.1; color: var(--ink); }
+  .timeline a > span { display: block; font-size: 14px; color: var(--muted); margin-top: 6px; padding-right: 12px; }
+  .timeline a:hover b { color: var(--brass-ink); }
+
+  .chapters { display: grid; gap: clamp(80px, 10vw, 140px); }
+  .chapter { display: grid; grid-template-columns: 5fr 6fr; gap: clamp(32px, 5vw, 80px); align-items: center; }
+  .chapter.flip .chapter-text { order: 2; }
+  .chapter.flip { grid-template-columns: 6fr 5fr; }
+  /* wide woodblock triptychs get the larger share of the row */
+  .chapter.wide { grid-template-columns: 4fr 7fr; }
+  .chapter.wide.flip { grid-template-columns: 7fr 4fr; }
+  .year {
+    display: block; font-family: var(--display); font-style: italic; font-weight: 400;
+    font-size: clamp(72px, 9vw, 128px); line-height: .9; letter-spacing: -.03em; color: var(--brass-ink);
+    font-variation-settings: "opsz" 144;
+  }
+  .chapter h3 { font-size: clamp(25px, 2.7vw, 34px); margin: 20px 0 20px; letter-spacing: -.01em; }
+  html.lang-ja .chapter h3 { font-size: clamp(22px, 2.3vw, 28px); }
+  .chapter-text p { color: var(--ink-2); }
+  .chapter-text .take {
+    margin-top: 26px; padding: 4px 0 4px 20px; border-left: 3px solid var(--brass);
+    font-family: var(--display); font-size: clamp(18px, 1.7vw, 21px); line-height: 1.6; color: var(--ink);
+  }
+  html.lang-ja .chapter-text .take { font-size: clamp(16px, 1.5vw, 18px); line-height: 1.9; }
+  .chapter-fig { margin: 0; position: relative; }
+  .chapter-fig .frame { position: relative; overflow: hidden; border-radius: 8px; background: var(--paper-2); box-shadow: 0 30px 60px -30px rgba(19, 32, 51, .45); }
+  .chapter-fig .frame img { width: 100%; height: 100%; object-fit: cover; }
+  .chapter-fig .inset {
+    position: absolute; right: -4%; top: -22%; width: 27%; aspect-ratio: 3 / 4; overflow: hidden;
+    border-radius: 8px; border: 6px solid var(--card); box-shadow: 0 20px 40px -18px rgba(19, 32, 51, .55); background: var(--paper-2);
+  }
+  .chapter-fig .inset img { width: 100%; height: 100%; object-fit: cover; }
+  .chapter-fig figcaption { margin-top: 14px; font-size: 13px; line-height: 1.6; color: var(--muted); }
+  .coda {
+    margin-top: clamp(80px, 10vw, 140px); padding: clamp(28px, 4vw, 52px); border-radius: 10px;
+    background: var(--paper); border: 1px solid var(--line);
+    display: grid; grid-template-columns: 7fr 5fr; gap: 28px clamp(28px, 4vw, 56px); align-items: center;
+  }
+  .coda .year { font-size: clamp(48px, 6vw, 80px); color: var(--ink); margin-bottom: 18px; }
+  .coda p { margin: 0; font-family: var(--display); font-size: clamp(19px, 2vw, 25px); line-height: 1.55; color: var(--ink); max-width: 620px; }
+  .coda-fig { margin: 0; }
+  .coda-fig img { width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 8px; }
+  .coda-fig figcaption { margin-top: 12px; font-size: 13px; line-height: 1.6; color: var(--muted); }
+  html.lang-ja .coda p { font-size: clamp(17px, 1.7vw, 21px); line-height: 1.9; }
+  @media (max-width: 860px) {
+    .chapter, .chapter.flip, .chapter.wide, .chapter.wide.flip { grid-template-columns: 1fr; }
+    .chapter.flip .chapter-text { order: 0; }
+    .chapter-fig .inset { right: 8px; top: -24px; width: 26%; }
+    .chapter-fig:has(.inset) { margin-top: 24px; }
+    .coda { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .timeline { grid-template-columns: 1fr 1fr; row-gap: 26px; }
+    .timeline::before { display: none; }
+  }
+
+  /* ---------- Vision ---------- */
+  .vision { background: var(--night-2); overflow: hidden; padding-bottom: calc(clamp(84px, 11vw, 150px) + 110px); }
+  .vision-art { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 220px; opacity: .5; pointer-events: none; }
+  .vision .wrap { position: relative; }
+  .vision-statement {
+    max-width: 1020px; margin: 0 0 clamp(56px, 7vw, 96px);
+    font-size: clamp(36px, 5.4vw, 72px); font-weight: 500; letter-spacing: -.02em; line-height: 1.12;
+    font-variation-settings: "opsz" 144;
+  }
+  .vision-statement em { color: var(--brass-soft); font-weight: 400; }
+  html.lang-ja .vision-statement { font-size: clamp(28px, 4vw, 52px); font-weight: 700; line-height: 1.5; }
+  html.lang-ja .vision-statement em { color: var(--brass-soft); }
+  .vision-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(28px, 4vw, 56px); }
+  .vision-grid > div { border-top: 1px solid var(--line-dark); padding-top: 24px; }
+  .vision-grid h3 { font-family: var(--sans); font-size: 13px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--brass-soft); margin-bottom: 14px; }
+  .vision-grid p { color: var(--on-dark-muted); }
+  @media (max-width: 860px) { .vision-grid { grid-template-columns: 1fr; } }
+
+  /* ---------- Business ---------- */
+  .business { background: var(--paper); }
+  .biz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 32px); }
+  .biz-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: clamp(28px, 3.6vw, 48px);
+    display: flex; flex-direction: column;
+  }
+  .biz-card .icon { width: 64px; height: 64px; margin-bottom: 26px; }
+  .biz-card .kicker { font-size: 12.5px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--harbor); margin: 0 0 8px; }
+  .biz-card h3 { font-size: clamp(26px, 2.6vw, 34px); margin-bottom: 16px; }
+  html.lang-ja .biz-card h3 { font-size: clamp(22px, 2.2vw, 28px); }
+  .biz-card > p { color: var(--ink-2); }
+  .ticks { list-style: none; margin: auto 0 0; padding: 22px 0 0; display: grid; gap: 10px; }
+  .ticks li { display: flex; gap: 12px; align-items: baseline; font-weight: 600; font-size: 15.5px; }
+  .ticks li::before { content: ""; flex: none; width: 18px; height: 6px; transform: translateY(-3px); background: var(--brass);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 6'%3E%3Cpath d='M1 3c2-2.4 4-2.4 6 0s4 2.4 6 0 3-1.6 4-1' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 6'%3E%3Cpath d='M1 3c2-2.4 4-2.4 6 0s4 2.4 6 0 3-1.6 4-1' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat; }
+  .ticks-wrap { border-top: 1px solid var(--line); margin-top: 26px; }
+
+  .strength {
+    margin-top: clamp(20px, 3vw, 32px); display: grid; grid-template-columns: 5fr 7fr; gap: clamp(28px, 5vw, 72px);
+    background: var(--night); color: var(--on-dark); border-radius: 10px; padding: clamp(28px, 4vw, 56px);
+  }
+  .strength h3 { font-size: clamp(24px, 2.4vw, 32px); margin-bottom: 16px; }
+  html.lang-ja .strength h3 { font-size: clamp(21px, 2vw, 26px); }
+  .strength p { color: var(--on-dark-muted); }
+  .attn { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .attn li { border: 1px solid var(--line-dark); border-radius: 8px; padding: 20px 18px; }
+  .attn b { display: block; font-family: var(--display); font-weight: 500; font-style: italic; font-size: 30px; line-height: 1; color: var(--brass-soft); margin-bottom: 12px; }
+  .attn span { font-weight: 600; font-size: 15.5px; line-height: 1.5; display: block; }
+
+  .flow-block { margin-top: clamp(56px, 7vw, 96px); display: grid; grid-template-columns: 5fr 7fr; gap: clamp(28px, 5vw, 72px); align-items: center; }
+  .flow-block h3 { font-size: clamp(24px, 2.4vw, 32px); margin-bottom: 16px; }
+  html.lang-ja .flow-block h3 { font-size: clamp(21px, 2vw, 26px); }
+  .flow-block p { color: var(--ink-2); }
+  .flow { position: relative; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); counter-reset: f; }
+  .flow::before { content: ""; position: absolute; left: 10%; right: 10%; top: 25px; height: 2px; background: var(--line); }
+  .flow li { position: relative; text-align: center; counter-increment: f; font-weight: 600; font-size: 14.5px; line-height: 1.35; padding: 0 4px; }
+  .flow li::before {
+    content: counter(f); display: grid; place-items: center; width: 52px; height: 52px; margin: 0 auto 14px; border-radius: 50%;
+    background: var(--card); border: 2px solid var(--c, var(--brass)); color: var(--ink);
+    font-family: var(--display); font-style: italic; font-weight: 500; font-size: 20px; position: relative;
+  }
+  .flow li.flow-loop { grid-column: 1 / -1; margin-top: 10px; counter-increment: none; display: block; padding: 0; }
+  .flow li.flow-loop::before { content: none; }
+  .flow-loop svg { width: 100%; height: 40px; }
+  .flow-loop p { text-align: center; font-size: 13.5px; color: var(--muted); margin: 2px 0 0; }
+  @media (max-width: 960px) {
+    .strength, .flow-block { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 760px) {
+    .biz-grid { grid-template-columns: 1fr; }
+    .attn { grid-template-columns: 1fr; }
+    .attn li { display: flex; gap: 16px; align-items: center; padding: 16px 18px; }
+    .attn b { margin: 0; font-size: 26px; }
+  }
+  @media (max-width: 560px) {
+    .flow { grid-template-columns: 1fr; gap: 12px; }
+    .flow::before { left: 25px; right: auto; top: 26px; bottom: 26px; width: 2px; height: auto; }
+    .flow li { display: flex; align-items: center; gap: 16px; text-align: left; }
+    .flow li::before { margin: 0; flex: none; }
+    .flow-loop svg { display: none; }
+    .flow-loop p { text-align: left; padding-left: 68px; }
+  }
+
+  /* ---------- Philosophy: five principles, one chord ---------- */
+  .philosophy { background: var(--night); overflow: hidden; }
+  .philosophy::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(50% 40% at 85% 0%, rgba(169, 156, 240, .12), transparent 70%), radial-gradient(40% 40% at 0% 100%, rgba(120, 196, 193, .1), transparent 70%);
+  }
+  .philosophy .wrap { position: relative; }
+  .chord-panel {
+    display: flex; align-items: center; gap: 24px 36px; flex-wrap: wrap;
+    margin: -16px 0 clamp(40px, 5vw, 64px); padding: 20px 24px; border: 1px solid var(--line-dark); border-radius: 12px;
+    background: rgba(243, 238, 229, .03);
+  }
+  .staff { width: 210px; height: 112px; flex: none; }
+  .staff .note { transform-box: fill-box; transform-origin: center; }
+  .staff .note.ring { animation: noteRing 1.4s ease-out; }
+  @keyframes noteRing {
+    0% { transform: scale(1); filter: none; }
+    18% { transform: scale(1.55); filter: drop-shadow(0 0 6px currentColor); }
+    100% { transform: scale(1); filter: none; }
+  }
+  .chord-panel .cp-text { flex: 1 1 280px; color: var(--on-dark-muted); font-size: 15.5px; margin: 0; }
+  .chord-panel .cp-text b { color: var(--on-dark); font-weight: 600; }
+
+  .principles { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line-dark); }
+  .principle {
+    display: grid; grid-template-columns: 150px 5fr 7fr; gap: 20px clamp(24px, 4vw, 56px);
+    padding: clamp(30px, 4vw, 48px) 0; border-bottom: 1px solid var(--line-dark); position: relative;
+  }
+  .principle::before {
+    content: ""; position: absolute; left: 0; top: -1px; height: 2px; width: 0; background: var(--v);
+    transition: width .9s cubic-bezier(.2, .7, .2, 1);
+  }
+  .principle.in::before, html:not(.js) .principle::before { width: 72px; }
+  .tone {
+    display: inline-flex; align-items: center; gap: 12px; align-self: start;
+    background: transparent; border: 1px solid rgba(243, 238, 229, .2); border-radius: 999px;
+    color: var(--on-dark); padding: 6px 14px 6px 6px; cursor: pointer; transition: border-color .2s, background .2s;
+  }
+  .tone:hover { border-color: var(--v); background: rgba(243, 238, 229, .05); }
+  .tone .dot {
+    display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--v); color: var(--night);
+    font-family: var(--display); font-style: italic; font-weight: 600; font-size: 15px;
+  }
+  .tone .tn { display: flex; flex-direction: column; line-height: 1.2; text-align: left; }
+  .tone .tn b { font-size: 13.5px; font-weight: 700; letter-spacing: .04em; }
+  .tone .tn small { font-size: 11.5px; opacity: .6; }
+  .tone.ring .dot { animation: toneRing 1.4s ease-out; }
+  @keyframes toneRing {
+    0% { box-shadow: 0 0 0 0 var(--v); }
+    25% { box-shadow: 0 0 0 10px transparent, 0 0 24px 4px var(--v); }
+    100% { box-shadow: 0 0 0 0 transparent; }
+  }
+  .principle h3 { font-size: clamp(25px, 2.6vw, 34px); font-weight: 500; letter-spacing: -.01em; }
+  .principle h3 em { color: var(--v); font-weight: 400; }
+  html.lang-ja .principle h3 { font-size: clamp(21px, 2.2vw, 27px); font-weight: 700; }
+  .principle .pb p { color: var(--on-dark-muted); }
+  .principle .pb p:first-child { color: var(--on-dark); }
+  @media (max-width: 960px) {
+    .principle { grid-template-columns: 1fr 1.4fr; }
+    .principle .tone { grid-column: 1 / -1; justify-self: start; }
+  }
+  @media (max-width: 680px) {
+    .principle { grid-template-columns: 1fr; }
+    .staff { width: 180px; height: 96px; }
+  }
+
+  /* ---------- Creating with the world ---------- */
+  .world { background: var(--card); padding-bottom: 0; }
+  .world-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(16px, 2vw, 24px); }
+  .world-item { border: 1px solid var(--line); border-radius: 10px; padding: 28px 24px; background: var(--paper); }
+  .world-item svg { width: 44px; height: 44px; margin-bottom: 22px; color: var(--harbor); }
+  .world-item h3 { font-size: 21px; margin-bottom: 12px; }
+  html.lang-ja .world-item h3 { font-size: 18px; }
+  .world-item p { color: var(--ink-2); font-size: 15.5px; }
+  @media (max-width: 1000px) { .world-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .world-grid { grid-template-columns: 1fr; } }
+
+  .finale {
+    position: relative; overflow: hidden; isolation: isolate; color: var(--on-dark);
+    margin-top: clamp(84px, 11vw, 150px); padding: clamp(110px, 14vw, 190px) 0 clamp(64px, 7vw, 96px);
+    background: var(--night);
+  }
+  .finale-bg { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: 50% 55%; }
+  .finale::before {
+    content: ""; position: absolute; inset: 0; z-index: -1;
+    background:
+      linear-gradient(180deg, rgba(8, 17, 31, .92) 0%, rgba(8, 17, 31, .55) 30%, rgba(8, 17, 31, .62) 62%, rgba(8, 17, 31, .96) 100%),
+      radial-gradient(60% 50% at 50% 40%, rgba(8, 17, 31, .6), transparent 80%);
+  }
+  .finale blockquote {
+    margin: 0 auto; max-width: 900px; text-align: center;
+    font-family: var(--display); font-size: clamp(26px, 3.4vw, 44px); font-weight: 500; line-height: 1.35; letter-spacing: -.01em;
+    text-shadow: 0 2px 30px rgba(0, 0, 0, .6);
+  }
+  html.lang-ja .finale blockquote { font-size: clamp(21px, 2.6vw, 32px); line-height: 1.8; font-weight: 700; letter-spacing: .02em; }
+  .finale .hope { max-width: 680px; margin: 28px auto 0; text-align: center; color: rgba(243, 238, 229, .85); text-shadow: 0 1px 14px rgba(0, 0, 0, .8); }
+  .finale .motto-close { margin: 30px 0 0; text-align: center; font-family: var(--display); font-style: italic; letter-spacing: .14em; color: var(--brass-soft); }
+  .finale .motto-close span[lang="ja"] { font-style: normal; letter-spacing: .1em; white-space: nowrap; }
+  .join { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; max-width: 980px; margin: clamp(64px, 8vw, 110px) auto 0; }
+  .join-card {
+    padding: 30px; border-radius: 10px; background: rgba(8, 17, 31, .62); border: 1px solid rgba(243, 238, 229, .16);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  }
+  .join-card h3 { font-size: 24px; margin-bottom: 10px; }
+  html.lang-ja .join-card h3 { font-size: 20px; }
+  .join-card p { color: var(--on-dark-muted); font-size: 15.5px; }
+  .join-card .btn { margin-top: 18px; }
+  .photo-cap { margin: clamp(48px, 6vw, 72px) 0 0; font-size: 12px; letter-spacing: .1em; color: rgba(243, 238, 229, .5); text-align: right; }
+  @media (max-width: 760px) { .join { grid-template-columns: 1fr; } }
+
+  /* ---------- Book a call (Calendly) ---------- */
+  .call { background: var(--paper); }
+  /* Wider than the text column: Calendly's date + time layout needs about 1,200px to breathe */
+  .call-panel {
+    margin-inline: calc((100% - min(1240px, 100vw - 2 * var(--gutter))) / 2);
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+  }
+  /* 820px fits Calendly's date + time view without an inner scrollbar; once the site is live,
+     Calendly reports its real height and the box follows it (see the booking script) */
+  .calendly-embed { position: relative; min-width: 320px; height: 820px; transition: height .25s ease; }
+  .calendly-embed iframe { display: block; width: 100%; height: 100%; border: 0; }
+  .calendly-wait { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; color: var(--muted); font-size: 15px; }
+  .call-fallback { margin: 18px 0 0; font-size: 14px; color: var(--muted); }
+  .call-fallback a { color: var(--harbor); text-underline-offset: 3px; overflow-wrap: anywhere; }
+  @media (max-width: 680px) { .calendly-embed { height: 1000px; } }
+
+  /* ---------- Contact ---------- */
+  .contact { background: var(--paper-2); }
+  .contact-grid { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(40px, 6vw, 88px); align-items: start; }
+  .contact-info h2 { font-size: clamp(32px, 4vw, 50px); margin-bottom: 22px; letter-spacing: -.012em; }
+  html.lang-ja .contact-info h2 { font-size: clamp(26px, 3vw, 38px); }
+  .details { margin: 36px 0 0; display: grid; gap: 0; }
+  .details > div { display: grid; grid-template-columns: 120px 1fr; gap: 16px; padding: 14px 0; border-top: 1px solid var(--line); }
+  .details > div:last-child { border-bottom: 1px solid var(--line); }
+  .details dt { font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding-top: 2px; }
+  .details dd { margin: 0; font-weight: 500; overflow-wrap: anywhere; }
+  .details a { color: var(--harbor); text-underline-offset: 3px; }
+  /* Two ways to reach us: by email, or by booking a call */
+  .reach { display: grid; gap: 18px; }
+  .reach-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: clamp(24px, 3vw, 38px); box-shadow: 0 30px 60px -40px rgba(19, 32, 51, .35);
+  }
+  .reach-k { margin: 0 0 14px; font-size: 12.5px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--brass-ink); }
+  html.lang-ja .reach-k { letter-spacing: .1em; }
+  .reach-mail {
+    display: inline-block; font-family: var(--display); font-size: clamp(21px, 2.4vw, 31px);
+    font-weight: 500; letter-spacing: -.01em; color: var(--ink); overflow-wrap: anywhere;
+    text-decoration-color: rgba(31, 95, 139, .4); text-underline-offset: 5px; transition: color .2s;
+  }
+  .reach-mail:hover { color: var(--harbor); text-decoration-color: currentColor; }
+  .reach-note { margin: 16px 0 0; color: var(--ink-2); font-size: 15.5px; }
+  .reach-card .btn { margin-top: 20px; }
+  @media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .details > div { grid-template-columns: 1fr; gap: 2px; } }
+
+  /* ---------- Footer ---------- */
+  .site-footer { background: var(--night); color: var(--on-dark-muted); padding: 0 0 40px; font-size: 14.5px; }
+  .footer-waves { width: 100%; height: 46px; margin-bottom: 56px; }
+  .footer-main { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; padding-bottom: 40px; border-bottom: 1px solid var(--line-dark); }
+  .footer-brand .brand { color: var(--on-dark); margin-bottom: 18px; }
+  .fmotto { font-family: var(--display); font-size: 20px; color: var(--on-dark); margin-bottom: 6px; }
+  .fmotto-ja { font-family: "Shippori Mincho B1", serif; letter-spacing: .16em; color: var(--brass-soft); margin-bottom: 18px; }
+  .footer-nav { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 32px; }
+  .footer-nav li { margin-bottom: 10px; break-inside: avoid; }
+  .footer-nav a { text-decoration: none; }
+  .footer-nav a:hover { color: var(--on-dark); }
+  .footer-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 24px; padding-top: 24px; }
+  .credits { flex-basis: 100%; margin: 14px 0 0; font-size: 12px; line-height: 1.7; color: rgba(243, 238, 229, .45); }
+  .credits a { color: rgba(243, 238, 229, .62); }
+  @media (max-width: 760px) { .footer-main { grid-template-columns: 1fr; } }
+
+  /* ---------- Reveal on scroll ---------- */
+  html.js .reveal { opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s cubic-bezier(.2, .7, .2, 1); }
+  html.js .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    html.js .reveal { opacity: 1; transform: none; transition: none; }
+    .staff .note.ring, .tone.ring .dot { animation: none; }
+    .btn:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main"><span class="en">Skip to content</span><span class="ja">本文へ移動</span></a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- Logo: three waves stacked like the notes of a chord -->
+    <symbol id="logo" viewBox="0 0 40 40">
+      <g fill="none" stroke-width="2.7" stroke-linecap="round">
+        <path d="M6.4 13.5c2.3-3.4 4.5-3.4 6.8 0s4.5 3.4 6.8 0 4.5-3.4 6.8 0 4.5 3.4 6.8 0" stroke="#e9b44c"/>
+        <path d="M6.4 20c2.3-3.4 4.5-3.4 6.8 0s4.5 3.4 6.8 0 4.5-3.4 6.8 0 4.5 3.4 6.8 0" stroke="#78c4c1"/>
+        <path d="M6.4 26.5c2.3-3.4 4.5-3.4 6.8 0s4.5 3.4 6.8 0 4.5-3.4 6.8 0 4.5 3.4 6.8 0" stroke="currentColor"/>
+      </g>
+    </symbol>
+    <symbol id="i-sound" viewBox="0 0 20 20">
+      <path d="M3 7.5h3l4-3.5v12l-4-3.5H3z" fill="currentColor"/>
+      <path d="M13 7a4 4 0 0 1 0 6M15.2 4.8a7 7 0 0 1 0 10.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-mute" viewBox="0 0 20 20">
+      <path d="M3 7.5h3l4-3.5v12l-4-3.5H3z" fill="currentColor"/>
+      <path d="M13.5 7.5l5 5M18.5 7.5l-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-arrow" viewBox="0 0 20 20">
+      <path d="M4 10h11M11 5.5 15.5 10 11 14.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="site-header">
+  <nav class="wrap nav" aria-label="Main">
+    <a class="brand" href="#top" aria-label="NamiChordLabs home">
+      <svg viewBox="0 0 40 40" aria-hidden="true" style="color:#f3eee5"><use href="#logo"/></svg>
+      <span class="brand-name">NamiChord<small>LABS</small></span>
+    </a>
+    <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="navLinks">
+      <span class="en" style="position:absolute;left:-9999px">Menu</span><span class="ja" style="position:absolute;left:-9999px">メニュー</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 7c3-2 6-2 9 0s6 2 9 0M3 12h18M3 17h18"/></svg>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#motto"><span class="en">Motto</span><span class="ja">モットー</span></a></li>
+      <li><a href="#story"><span class="en">Our story</span><span class="ja">横浜の物語</span></a></li>
+      <li><a href="#vision"><span class="en">Vision</span><span class="ja">ビジョン</span></a></li>
+      <li><a href="#business"><span class="en">Business</span><span class="ja">事業内容</span></a></li>
+      <li><a href="#philosophy"><span class="en">Philosophy</span><span class="ja">経営理念</span></a></li>
+      <li><a href="#world"><span class="en">With the world</span><span class="ja">世界と共に</span></a></li>
+      <li><a class="nav-cta" href="#call"><span class="en">Book a call</span><span class="ja">通話を予約</span></a></li>
+      <li class="lang-li"><button class="lang-btn" id="langBtn" type="button"><span class="en" lang="ja">日本語</span><span class="ja" lang="en">English</span></button></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- ============ Hero ============ -->
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <!-- The motto, acted out on Yokohama harbor by the hero script at the end of the page:
+         1 Open first: a doorway of light opens on the water and ideas arrive through it from every direction.
+         2 Play together: the sea's five voices rise into a staff and the ideas stack into one chord, with fireworks. -->
+    <canvas id="sea" aria-hidden="true"></canvas>
+    <!-- Captions for the two symbols; the script places them beside the doorway and the staff -->
+    <p class="act-cap" id="capOpen" aria-hidden="true">
+      <span class="cap-t"><i>01</i><span class="en">Open first</span><span class="ja">まず、ひらく</span></span>
+      <span class="cap-s"><span class="en">Welcoming unfamiliar ideas from everywhere</span><span class="ja">なじみのないアイデアを、世界中から迎え入れる</span></span>
+    </p>
+    <p class="act-cap" id="capPlay" aria-hidden="true">
+      <span class="cap-t"><i>02</i><span class="en">Play together</span><span class="ja">共に、奏でる</span></span>
+      <span class="cap-s"><span class="en">Many voices, one chord</span><span class="ja">異なる声が、ひとつの和音に</span></span>
+    </p>
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow rise" style="--d:.05s"><span>NamiChordLabs</span><i></i><span class="en">Yokohama, Japan</span><span class="ja">横浜</span></p>
+        <h1 id="hero-title">
+          <span class="en"><span class="line l1"><span class="w" style="--i:0">Open</span> <span class="w k k1" style="--i:1">first.<svg class="tw" viewBox="0 0 300 14" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M3 7C21 1 39 1 57 7S93 13 111 7S147 1 165 7S201 13 219 7S255 1 273 7S291 11 297 9"/></svg></span></span><span class="line l2"><span class="w" style="--i:2">Play</span> <em class="w k k2 tune" style="--i:3">together.<svg class="tw" viewBox="0 0 300 14" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M3 7C21 1 39 1 57 7S93 13 111 7S147 1 165 7S201 13 219 7S255 1 273 7S291 11 297 9"/></svg></em></span></span>
+          <span class="ja"><span class="line l1"><span class="w" style="--i:0">まず、</span><span class="w k k1" style="--i:1">ひらく。<svg class="tw" viewBox="0 0 300 14" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M3 7C21 1 39 1 57 7S93 13 111 7S147 1 165 7S201 13 219 7S255 1 273 7S291 11 297 9"/></svg></span></span><span class="line l2"><span class="w" style="--i:2">共に、</span><em class="w k k2 tune" style="--i:3">奏でる。<svg class="tw" viewBox="0 0 300 14" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M3 7C21 1 39 1 57 7S93 13 111 7S147 1 165 7S201 13 219 7S255 1 273 7S291 11 297 9"/></svg></em></span></span>
+        </h1>
+        <p class="hero-sub rise" style="--d:.85s"><span class="en" lang="ja">まず、ひらく。共に、奏でる。</span><span class="ja" lang="en">Open first. Play together.</span></p>
+        <p class="hero-lead rise" style="--d:1s">
+          <span class="en">We bring the world's ideas into everyday life through technology people love using. From Yokohama, we build AI, blockchain, and emerging-technology products with colleagues, customers, and partners around the world.</span>
+          <span class="ja">使う人に愛されるテクノロジーで、世界のアイデアを日々の暮らしへ。横浜を拠点に、世界中の仲間、お客さま、パートナーと共に、AI、ブロックチェーン、そして新しいテクノロジーの製品をつくっています。</span>
+        </p>
+        <div class="hero-cta rise" style="--d:1.15s">
+          <a class="btn btn-brass" href="#call"><span class="en">Book a call</span><span class="ja">通話を予約する</span></a>
+          <a class="btn btn-ghost" href="#story"><span class="en">Our Yokohama story</span><span class="ja">私たちの横浜物語</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="jam rise" style="--d:1.7s">
+      <div class="jam-top" aria-hidden="true">
+        <span class="jam-label"><i class="beat"></i><span class="en">Now playing</span><span class="ja">セッション中</span></span>
+        <canvas class="scope" width="224" height="56"></canvas>
+      </div>
+      <ol class="chords" aria-hidden="true">
+        <li>Dm<sup>9</sup></li>
+        <li>G<sup>13</sup></li>
+        <li>C<sup>maj9</sup></li>
+      </ol>
+      <div class="jam-bottom">
+        <button class="sound-btn" id="soundBtn" type="button" aria-pressed="false">
+          <svg class="ic-off" aria-hidden="true"><use href="#i-mute"/></svg><svg class="ic-on" aria-hidden="true"><use href="#i-sound"/></svg>
+          <span><span class="en">Sound</span><span class="ja">音</span></span>
+          <span class="st" aria-hidden="true"><span class="s-off"><span class="en">off</span><span class="ja">オフ</span></span><span class="s-on"><span class="en">on</span><span class="ja">オン</span></span></span>
+        </button>
+        <span class="jam-hint"><span class="en">Tap the harbor to play along.</span><span class="ja">港をタップして、セッションに参加。</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Motto ============ -->
+  <section class="section motto" id="motto" aria-labelledby="motto-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <p class="label"><span class="en">Our motto</span><span class="ja">モットー</span></p>
+          <h2 id="motto-title"><span class="en">Two ideas we bring to every piece of work.</span><span class="ja">すべての仕事に持ち込む、二つの姿勢。</span></h2>
+        </div>
+        <p class="lead">
+          <span class="en">Our motto is short so that everyone can carry it into a meeting, a design review, or a conversation with a customer.</span>
+          <span class="ja">短い言葉だからこそ、会議でも、設計レビューでも、お客さまとの対話でも、一人ひとりが持ち歩くことができます。</span>
+        </p>
+      </div>
+
+      <div class="motto-pair">
+        <article class="motto-card reveal">
+          <!-- Open first: ripples spreading outward from one point -->
+          <svg class="mc-art" viewBox="0 0 400 92" preserveAspectRatio="xMinYMid meet" aria-hidden="true">
+            <g fill="none" stroke-linecap="round">
+              <circle cx="46" cy="46" r="7" fill="#e9b44c"/>
+              <path d="M70 18a40 40 0 0 1 0 56" stroke="#e9b44c" stroke-width="2.4"/>
+              <path d="M92 6a58 58 0 0 1 0 80" stroke="#78c4c1" stroke-width="2.2" opacity=".9"/>
+              <path d="M116 -2a76 76 0 0 1 0 96" stroke="#ec8b6b" stroke-width="2" opacity=".75"/>
+              <path d="M142 -6a94 94 0 0 1 0 104" stroke="#a99cf0" stroke-width="1.8" opacity=".6"/>
+              <path d="M170 -8a112 112 0 0 1 0 108" stroke="#8ec5f2" stroke-width="1.6" opacity=".45"/>
+            </g>
+          </svg>
+          <h3><span class="en">Open <em>first.</em></span><span class="ja">まず、<em>ひらく。</em></span></h3>
+          <p class="mc-ja"><span class="en" lang="ja">まず、ひらく。</span><span class="ja" lang="en">Open first.</span></p>
+          <p>
+            <span class="en">Open first means beginning with curiosity: welcoming unfamiliar ideas, listening to different perspectives, and making it possible for others to work with us.</span>
+            <span class="ja">「まず、ひらく」とは、好奇心から始めることです。なじみのないアイデアを歓迎し、異なる視点に耳を傾け、誰もが私たちと一緒に働けるようにすること。</span>
+          </p>
+        </article>
+        <article class="motto-card reveal">
+          <!-- Play together: separate lines meeting in one shared wave -->
+          <svg class="mc-art" viewBox="0 0 400 92" preserveAspectRatio="xMinYMid meet" aria-hidden="true">
+            <g fill="none" stroke-width="2.2" stroke-linecap="round">
+              <path d="M8 14C60 14 80 46 140 46" stroke="#78c4c1"/>
+              <path d="M8 30C60 30 80 46 140 46" stroke="#e9b44c"/>
+              <path d="M8 46H140" stroke="#ec8b6b"/>
+              <path d="M8 62C60 62 80 46 140 46" stroke="#a99cf0"/>
+              <path d="M8 78C60 78 80 46 140 46" stroke="#8ec5f2"/>
+              <path d="M140 46c13-20 27-20 40 0s27 20 40 0 27-20 40 0 27 20 40 0 27-20 40 0" stroke="#132033" stroke-width="3"/>
+            </g>
+          </svg>
+          <h3><span class="en">Play <em>together.</em></span><span class="ja">共に、<em>奏でる。</em></span></h3>
+          <p class="mc-ja"><span class="en" lang="ja">共に、奏でる。</span><span class="ja" lang="en">Play together.</span></p>
+          <p>
+            <span class="en">Play together means bringing individual expertise into a shared creative effort. We give people room to contribute, listen closely to one another, and take responsibility for the quality of the finished work.</span>
+            <span class="ja">「共に、奏でる」とは、一人ひとりの専門性を持ち寄り、ひとつの創造へとつなげることです。誰もが力を発揮できる余地をつくり、互いの声によく耳を傾け、仕上がりの品質に責任を持ちます。</span>
+          </p>
+        </article>
+      </div>
+
+      <div class="inspire reveal">
+        <p>
+          <span class="en">Our inspiration comes from <strong>two parts of Yokohama's identity</strong>: its international port and the Yokohama Jazz Promenade.</span>
+          <span class="ja">この姿勢は、<strong>横浜を形づくる二つの顔</strong>から生まれました。国際港としての横浜と、横濱ジャズプロムナードです。</span>
+        </p>
+        <div class="inspire-links">
+          <a class="chip" href="#ch-1859"><b>1859</b><span class="en">The international port</span><span class="ja">国際港・横浜</span></a>
+          <a class="chip" href="#ch-1993"><b>1993</b><span class="en">Yokohama Jazz Promenade</span><span class="ja">横濱ジャズプロムナード</span></a>
+        </div>
+      </div>
+
+      <div class="name-note reveal">
+        <span class="kanji" aria-hidden="true">波</span>
+        <div>
+          <h3><span class="en">In our name</span><span class="ja">社名について</span></h3>
+          <p>
+            <span class="en"><i>Nami</i> (波) is Japanese for “wave”: the harbor water that carried new ideas to Yokohama. A <i>chord</i> is several notes sounding together. NamiChordLabs brings the two together, and so do we.</span>
+            <span class="ja">「波（なみ）」は、新しいアイデアを横浜へと運んできた港の波。「コード（和音）」は、いくつもの音が重なり合って響くこと。NamiChordLabs（NCL）は、その二つを重ね合わせた名前です。</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Our Yokohama story ============ -->
+  <section class="section story" id="story" aria-labelledby="story-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <p class="label"><span class="en">Our Yokohama story</span><span class="ja">私たちの横浜物語</span></p>
+          <h2 id="story-title"><span class="en">What a harbor city taught us.</span><span class="ja">港町・横浜が教えてくれたこと。</span></h2>
+        </div>
+        <p class="lead">
+          <span class="en">Two parts of Yokohama's history shape how we work: a port that turned exchange into everyday life, and a festival that fills the city with music.</span>
+          <span class="ja">交流を日々の暮らしへと変えてきた港と、街じゅうを音楽で満たすフェスティバル。横浜の二つの歴史が、私たちの働き方を形づくっています。</span>
+        </p>
+      </div>
+
+      <ol class="timeline reveal">
+        <li><a href="#ch-1859"><b>1859</b><span class="en">The port opens to the world</span><span class="ja">横浜港、世界にひらく</span></a></li>
+        <li><a href="#ch-1872"><b>1872</b><span class="en">Railway and gas light</span><span class="ja">鉄道とガス灯</span></a></li>
+        <li><a href="#ch-1993"><b>1993</b><span class="en">Yokohama Jazz Promenade</span><span class="ja">横濱ジャズプロムナード</span></a></li>
+        <li><a href="#ch-today"><b><span class="en">Today</span><span class="ja">いま</span></b><span class="en">NamiChordLabs</span><span class="ja">NamiChordLabs</span></a></li>
+      </ol>
+
+      <div class="chapters">
+        <article class="chapter wide" id="ch-1859">
+          <div class="chapter-text reveal">
+            <span class="year">1859</span>
+            <h3><span class="en">A port opens to the world</span><span class="ja">港が、世界にひらく</span></h3>
+            <p>
+              <span class="en">The Port of Yokohama opened to international trade in 1859 and became a major gateway for overseas technologies and cultures. The city helped turn exchange into practical changes in everyday life, including new transportation and public infrastructure.</span>
+              <span class="ja">1859年、横浜港は国際貿易に向けて開かれ、海外の技術や文化を迎え入れる主要な玄関口となりました。横浜は、そうした交流を新しい交通や公共インフラなど、日々の暮らしを変える実際の変化へとつなげていきました。</span>
+            </p>
+          </div>
+          <figure class="chapter-fig no-inset reveal">
+            <div class="frame" style="aspect-ratio: 1920 / 981">
+              <img src="images/photos/port-opening.jpg" width="1920" height="981" alt="Woodblock triptych of Western sailing ships and steamships flying American, British, French and other flags in Yokohama harbor, with small boats carrying cargo and passengers over blue waves" loading="lazy" decoding="async">
+            </div>
+            <figcaption><span class="en">Utagawa Sadahide, <i>Yokohama Trade: Westerners Loading Cargo</i>, 1861, two years after the port opened.</span><span class="ja">歌川貞秀『横浜交易西洋人荷物運送之図』（1861年）。開港から2年後の横浜港。</span></figcaption>
+          </figure>
+        </article>
+
+        <article class="chapter wide flip" id="ch-1872">
+          <div class="chapter-text reveal">
+            <span class="year">1872</span>
+            <h3><span class="en">New ideas become everyday life</span><span class="ja">新しいものが、暮らしになる</span></h3>
+            <p>
+              <span class="en">In 1872, Japan's first railway connected Yokohama and Shimbashi, while gas lighting began illuminating the city's streets.</span>
+              <span class="ja">1872年には、日本初の鉄道が横浜と新橋を結び、ガス灯が横浜の街路を照らし始めました。</span>
+            </p>
+            <p>
+              <span class="en">We take inspiration from that process of adoption and adaptation.</span>
+              <span class="ja">私たちが学ぶのは、新しいものを受け入れ、自分たちに合わせて形を変えていく、その過程です。</span>
+            </p>
+            <p class="take">
+              <span class="en">An unfamiliar idea becomes useful when people can understand it, work with it, and make it their own.</span>
+              <span class="ja">なじみのないアイデアは、人々が理解し、使いこなし、自分のものにできたときに、はじめて役に立つものになります。</span>
+            </p>
+          </div>
+          <figure class="chapter-fig reveal">
+            <div class="frame" style="aspect-ratio: 1556 / 760">
+              <img src="images/photos/railway-1872.jpg" width="1556" height="760" alt="Woodblock triptych of a steam locomotive pulling red passenger carriages full of travellers past cherry trees in blossom, with Yokohama harbor, sailing ships and hills behind" loading="lazy" decoding="async">
+            </div>
+            <div class="inset">
+              <img src="images/photos/gas-lamp.jpg" width="960" height="1707" style="object-position: 50% 22%" alt="Lit replica gas lamps beside a granite monument on red-brick paving on Bashamichi, Yokohama" loading="lazy" decoding="async">
+            </div>
+            <figcaption><span class="en">Utagawa Kunisada III, <i>Steam Train Departing from Yokohama</i>, 1872. Inset: replica gas lamps on Bashamichi today.</span><span class="ja">三代歌川国貞『横濱鐵道蒸氣出車之圖』（1872年）。右上は、現在の馬車道に立つ復元ガス灯。</span></figcaption>
+          </figure>
+        </article>
+
+        <article class="chapter" id="ch-1993">
+          <div class="chapter-text reveal">
+            <span class="year">1993</span>
+            <h3><span class="en">A city that plays together</span><span class="ja">街じゅうで、共に奏でる</span></h3>
+            <p>
+              <span class="en">The Yokohama Jazz Promenade offers another lesson. Since its beginning in 1993, the festival has brought music into concert halls, jazz clubs, and public spaces, with opportunities for professional and amateur performers. Its character comes from the participation of musicians, audiences, volunteers, and supporting organizations.</span>
+              <span class="ja">横濱ジャズプロムナードは、もうひとつの教えを与えてくれます。1993年に始まったこのフェスティバルは、コンサートホールやジャズクラブ、街なかの広場へと音楽を届け、プロとアマチュアの演奏家に舞台をひらいてきました。その魅力は、ミュージシャン、観客、ボランティア、そして支える団体の参加によって生まれています。</span>
+            </p>
+            <p class="take">
+              <span class="en">For our company, jazz represents attentive collaboration. Each person brings a distinct skill and perspective. What we create depends on how well we listen and respond.</span>
+              <span class="ja">私たちにとってジャズとは、互いに耳を澄ませる協働の象徴です。一人ひとりが異なる技能と視点を持ち寄ります。何を生み出せるかは、どれだけよく聴き、どう応えるかにかかっています。</span>
+            </p>
+          </div>
+          <figure class="chapter-fig no-inset reveal">
+            <div class="frame" style="aspect-ratio: 1 / 1">
+              <img src="images/photos/jazz-promenade.jpg" width="960" height="1440" style="object-position: 50% 52%" alt="A big band with saxophones, trumpets, guitar and drums plays an outdoor concert in front of the sailing ship Nippon Maru in Yokohama, watched by a crowd" loading="lazy" decoding="async">
+            </div>
+            <figcaption><span class="en">Music in a public space: a big-band concert by the harbor in Minato Mirai, in front of the sailing ship Nippon Maru.</span><span class="ja">街なかに響く音楽。みなとみらいの港沿い、帆船日本丸の前で開かれたビッグバンドのコンサート。</span></figcaption>
+          </figure>
+        </article>
+      </div>
+
+      <div class="coda reveal" id="ch-today">
+        <div>
+          <span class="year"><span class="en">Today</span><span class="ja">いま</span></span>
+          <p>
+            <span class="en">These are our contemporary interpretations of Yokohama's history and culture. They shape the company we intend to build.</span>
+            <span class="ja">これらは、横浜の歴史と文化を、私たちなりに現代の視点で受け止めたものです。私たちが築こうとしている会社の姿を、形づくっています。</span>
+          </p>
+        </div>
+        <figure class="coda-fig">
+          <img src="images/photos/red-brick.jpg" width="1920" height="1240" alt="Yokohama Red Brick Warehouse, a long three-storey red-brick building with a glass-fronted ground floor, under a clear blue sky" loading="lazy" decoding="async">
+          <figcaption><span class="en">Yokohama Red Brick Warehouse: built as customs warehouses in the 1910s, reopened in 2002 as a place for culture and shopping.</span><span class="ja">横浜赤レンガ倉庫。1910年代に国の保税倉庫として建てられ、2002年に文化・商業施設として生まれ変わりました。</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Vision ============ -->
+  <section class="section dark vision" id="vision" aria-labelledby="vision-title">
+    <svg class="vision-art" viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true">
+      <g fill="none" stroke-width="1.4">
+        <path d="M0 60C180 20 360 100 540 60S900 20 1080 60 1260 100 1440 60" stroke="#78c4c1" opacity=".35"/>
+        <path d="M0 95C180 55 360 135 540 95S900 55 1080 95 1260 135 1440 95" stroke="#e9b44c" opacity=".35"/>
+        <path d="M0 130C180 90 360 170 540 130S900 90 1080 130 1260 170 1440 130" stroke="#ec8b6b" opacity=".3"/>
+        <path d="M0 165C180 125 360 205 540 165S900 125 1080 165 1260 205 1440 165" stroke="#a99cf0" opacity=".28"/>
+        <path d="M0 200C180 160 360 240 540 200S900 160 1080 200 1260 240 1440 200" stroke="#8ec5f2" opacity=".25"/>
+      </g>
+    </svg>
+    <div class="wrap">
+      <p class="label reveal"><span class="en">Our corporate vision</span><span class="ja">ビジョン</span></p>
+      <h2 id="vision-title" class="vision-statement reveal">
+        <span class="en">To bring <em>the world's ideas</em> into everyday life through technology people <em>love using.</em></span>
+        <span class="ja">使う人に<em>愛される</em>テクノロジーで、<em>世界のアイデア</em>を日々の暮らしへ届ける。</span>
+      </h2>
+      <div class="vision-grid">
+        <div class="reveal">
+          <h3><span class="en">What we aim to be</span><span class="ja">目指す姿</span></h3>
+          <p>
+            <span class="en">We aim to become an IT company known for making advanced technology useful, dependable, and accessible to people across countries and cultures.</span>
+            <span class="ja">先進的なテクノロジーを、国や文化を越えて、誰もが役立てられ、信頼でき、手軽に使えるものにする。そのことで知られるIT企業を目指します。</span>
+          </p>
+        </div>
+        <div class="reveal">
+          <h3><span class="en">What we create</span><span class="ja">つくるもの</span></h3>
+          <p>
+            <span class="en">Through artificial intelligence, blockchain, and emerging technologies, we create products that help people accomplish meaningful work. Our ambition is to earn a place in their lives through a clear understanding of their needs and continued attention to their experience.</span>
+            <span class="ja">人工知能、ブロックチェーン、そして新しいテクノロジーを通じて、人々が意義のある仕事を成し遂げるための製品をつくります。ニーズを明確に理解し、使う体験に気を配り続けることで、人々の暮らしの中に確かな居場所を得ることが私たちの志です。</span>
+          </p>
+        </div>
+        <div class="reveal">
+          <h3><span class="en">Who we build with</span><span class="ja">共につくる人</span></h3>
+          <p>
+            <span class="en">We develop these products with international colleagues, customers, researchers, and business partners whose knowledge influences what we build.</span>
+            <span class="ja">これらの製品は、国際的な仲間、お客さま、研究者、ビジネスパートナーと共に開発します。その方々の知見が、私たちのつくるものを形づくります。</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Business direction ============ -->
+  <section class="section business" id="business" aria-labelledby="business-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <p class="label"><span class="en">What we build</span><span class="ja">事業内容</span></p>
+          <h2 id="business-title"><span class="en">Our business direction</span><span class="ja">事業の方向性</span></h2>
+        </div>
+        <p class="lead">
+          <span class="en">Our competitive strength comes from understanding specific customer workflows and making new capabilities work within them.</span>
+          <span class="ja">私たちの強みは、お客さまごとの具体的な業務の流れを理解し、その中で新しい技術が確かに機能するようにすることにあります。</span>
+        </p>
+      </div>
+
+      <div class="biz-grid">
+        <article class="biz-card reveal">
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <rect x="4" y="8" width="34" height="26" rx="7" fill="#1f5f8b"/>
+            <path d="M12 34v8l8-8" fill="#1f5f8b"/>
+            <text x="21" y="27.5" text-anchor="middle" font-family="Fraunces, serif" font-size="17" font-weight="600" fill="#fffdf8">A</text>
+            <rect x="26" y="26" width="34" height="26" rx="7" fill="#e9b44c"/>
+            <path d="M52 52v8l-8-8" fill="#e9b44c"/>
+            <text x="43" y="45" text-anchor="middle" font-family="'Zen Kaku Gothic Antique', sans-serif" font-size="15" font-weight="700" fill="#132033">あ</text>
+          </svg>
+          <p class="kicker"><span class="en">Artificial intelligence</span><span class="ja">人工知能</span></p>
+          <h3><span class="en">AI applications</span><span class="ja">AIアプリケーション</span></h3>
+          <p>
+            <span class="en">We develop AI applications that help people find relevant information, complete demanding tasks, and communicate across languages.</span>
+            <span class="ja">人々が必要な情報を見つけ、負荷の高い業務をやり遂げ、言語の壁を越えてコミュニケーションできるよう支援するAIアプリケーションを開発します。</span>
+          </p>
+          <div class="ticks-wrap">
+            <ul class="ticks">
+              <li><span class="en">Find relevant information</span><span class="ja">必要な情報を見つける</span></li>
+              <li><span class="en">Complete demanding tasks</span><span class="ja">難しい業務をやり遂げる</span></li>
+              <li><span class="en">Communicate across languages</span><span class="ja">言語を越えて伝え合う</span></li>
+            </ul>
+          </div>
+        </article>
+        <article class="biz-card reveal">
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <g fill="none" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round">
+              <rect x="4" y="22" width="18" height="18" rx="4" fill="#78c4c1" stroke="#78c4c1"/>
+              <rect x="23" y="22" width="18" height="18" rx="4" fill="#1f5f8b" stroke="#1f5f8b"/>
+              <rect x="42" y="22" width="18" height="18" rx="4" fill="#e9b44c" stroke="#e9b44c"/>
+              <path d="M27.5 31l3 3 6-6.5" stroke="#fffdf8"/>
+              <path d="M13 22v-8h38v8M13 40v8h38v-8" stroke="#132033" stroke-width="1.8" stroke-dasharray="3 3.5"/>
+            </g>
+          </svg>
+          <p class="kicker"><span class="en">Blockchain</span><span class="ja">ブロックチェーン</span></p>
+          <h3><span class="en">Shared verification</span><span class="ja">共有された検証</span></h3>
+          <p>
+            <span class="en">We explore blockchain applications where shared verification can improve cooperation between organizations, including records of agreed permissions, licenses, and transactions.</span>
+            <span class="ja">共有された検証の仕組みが組織間の協力をより良くする領域で、ブロックチェーンの活用を探求します。合意された権限、ライセンス、取引の記録などがその例です。</span>
+          </p>
+          <div class="ticks-wrap">
+            <ul class="ticks">
+              <li><span class="en">Records of agreed permissions</span><span class="ja">合意された権限の記録</span></li>
+              <li><span class="en">Licenses</span><span class="ja">ライセンス</span></li>
+              <li><span class="en">Transactions</span><span class="ja">取引</span></li>
+            </ul>
+          </div>
+        </article>
+      </div>
+
+      <div class="strength reveal">
+        <div>
+          <h3><span class="en">What we pay attention to</span><span class="ja">私たちが目を配ること</span></h3>
+          <p>
+            <span class="en">New capabilities only matter when they work within the way customers already work. So we look beyond the feature itself.</span>
+            <span class="ja">新しい技術は、お客さまの今の仕事の中で機能してこそ意味を持ちます。だから私たちは、機能そのものの先まで目を配ります。</span>
+          </p>
+        </div>
+        <ul class="attn">
+          <li><b>i.</b><span><span class="en">The connections between products</span><span class="ja">製品同士のつながり</span></span></li>
+          <li><b>ii.</b><span><span class="en">The clarity of the experience</span><span class="ja">体験のわかりやすさ</span></span></li>
+          <li><b>iii.</b><span><span class="en">The support customers need after adoption</span><span class="ja">導入後にお客さまが必要とするサポート</span></span></li>
+        </ul>
+      </div>
+
+      <div class="flow-block">
+        <div class="reveal">
+          <h3><span class="en">From research to reliable operation</span><span class="ja">研究から、安定した運用まで</span></h3>
+          <p>
+            <span class="en">We build specialized expertise that carries through from research and design to reliable operation. Each product becomes better through close use, direct feedback, and sustained improvement.</span>
+            <span class="ja">研究・設計から安定した運用まで、一貫して生かせる専門性を築きます。どの製品も、身近な利用、率直なフィードバック、継続的な改善を通じて、より良いものになっていきます。</span>
+          </p>
+        </div>
+        <ol class="flow reveal">
+          <li style="--c: var(--v0)"><span class="en">Research</span><span class="ja">研究</span></li>
+          <li style="--c: var(--v1)"><span class="en">Design</span><span class="ja">設計</span></li>
+          <li style="--c: var(--v2)"><span class="en">Reliable operation</span><span class="ja">安定した運用</span></li>
+          <li style="--c: var(--v3)"><span class="en">Close use &amp; feedback</span><span class="ja">利用とフィードバック</span></li>
+          <li style="--c: var(--v4)"><span class="en">Sustained improvement</span><span class="ja">継続的な改善</span></li>
+          <li class="flow-loop" aria-hidden="true">
+            <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+              <path d="M540 4c0 22-20 30-60 30H120C80 34 60 26 60 4" fill="none" stroke="#c9bba1" stroke-width="1.6" stroke-dasharray="4 5" vector-effect="non-scaling-stroke"/>
+              <path d="M54 12l6-9 6 9" fill="none" stroke="#c9bba1" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+            </svg>
+            <p><span class="en">…and around again, with every release.</span><span class="ja">…そして、リリースのたびに、また次の一周へ。</span></p>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Management philosophy ============ -->
+  <section class="section dark philosophy" id="philosophy" aria-labelledby="philosophy-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <p class="label"><span class="en">Our management philosophy</span><span class="ja">経営理念</span></p>
+          <h2 id="philosophy-title"><span class="en">Five principles, one chord.</span><span class="ja">五つの原則、ひとつの和音。</span></h2>
+        </div>
+        <p class="lead">
+          <span class="en">Like the notes of a jazz chord, each principle has its own voice, and they work best when they sound together.</span>
+          <span class="ja">ジャズの和音のように、五つの原則はそれぞれに固有の響きを持ち、重なり合うときに最もよく響きます。</span>
+        </p>
+      </div>
+
+      <div class="chord-panel reveal">
+        <!-- Cmaj9 on a staff: C, E, G, B, D, one note per principle -->
+        <svg class="staff" viewBox="0 0 210 112" aria-hidden="true">
+          <g stroke="rgba(243,238,229,.32)" stroke-width="1.2">
+            <path d="M6 22H204M6 34H204M6 46H204M6 58H204M6 70H204"/>
+            <path d="M90 82H124"/>
+          </g>
+          <path d="M115.5 80V8" stroke="rgba(243,238,229,.75)" stroke-width="1.6"/>
+          <!-- the ring animation runs on each <g>, the note-head tilt stays on the ellipse -->
+          <g class="note" data-voice="0" style="color:#78c4c1"><ellipse cx="107" cy="82" rx="7.6" ry="5.4" transform="rotate(-20 107 82)" fill="#78c4c1"/></g>
+          <g class="note" data-voice="1" style="color:#e9b44c"><ellipse cx="107" cy="70" rx="7.6" ry="5.4" transform="rotate(-20 107 70)" fill="#e9b44c"/></g>
+          <g class="note" data-voice="2" style="color:#ec8b6b"><ellipse cx="107" cy="58" rx="7.6" ry="5.4" transform="rotate(-20 107 58)" fill="#ec8b6b"/></g>
+          <g class="note" data-voice="3" style="color:#a99cf0"><ellipse cx="107" cy="46" rx="7.6" ry="5.4" transform="rotate(-20 107 46)" fill="#a99cf0"/></g>
+          <g class="note" data-voice="4" style="color:#8ec5f2"><ellipse cx="107" cy="34" rx="7.6" ry="5.4" transform="rotate(-20 107 34)" fill="#8ec5f2"/></g>
+          <g font-family="Fraunces, serif" font-style="italic" font-size="11" fill="rgba(243,238,229,.6)">
+            <text x="134" y="86">1</text><text x="134" y="74">3</text><text x="134" y="62">5</text><text x="134" y="50">7</text><text x="134" y="38">9</text>
+          </g>
+        </svg>
+        <p class="cp-text">
+          <span class="en"><b>Root, 3rd, 5th, 7th, 9th.</b> Tap a note to hear one principle, or play all five to hear how they work together.</span>
+          <span class="ja"><b>ルート、3度、5度、7度、9度。</b>音をタップすると一つずつ、まとめて鳴らすと五つが重なり合う響きを聴くことができます。</span>
+        </p>
+        <button class="play-btn" type="button" data-play-chord>
+          <span class="pb-dots"><svg aria-hidden="true"><use href="#i-sound"/></svg></span>
+          <span><span class="en">Play the chord</span><span class="ja">和音を鳴らす</span> <small><span class="en">(sound)</span><span class="ja">（音が出ます）</span></small></span>
+        </button>
+      </div>
+
+      <ol class="principles">
+        <li class="principle reveal" style="--v: var(--v0)">
+          <button class="tone" type="button" data-note="0" data-voice="0">
+            <span class="dot">1</span><span class="tn"><b><span class="en">Root</span><span class="ja">ルート</span></b><small><span class="en">Play note C</span><span class="ja">ドの音</span></small></span>
+          </button>
+          <h3><span class="en">Start with an <em>open conversation.</em></span><span class="ja">開かれた<em>対話</em>から始める。</span></h3>
+          <div class="pb">
+            <p>
+              <span class="en">We begin by understanding the problem from the perspective of the people experiencing it. Customers, colleagues, and partners should be able to question our assumptions and help us see what we have missed.</span>
+              <span class="ja">私たちは、課題に直面している人の視点から、その課題を理解することから始めます。お客さま、仲間、パートナーの誰もが私たちの前提に疑問を投げかけ、見落としに気づかせてくれる関係でありたいと考えています。</span>
+            </p>
+            <p>
+              <span class="en">Management encourages honest discussion. We explain the reasoning behind priorities, welcome thoughtful disagreement, and change direction when the evidence gives us a better understanding.</span>
+              <span class="ja">経営陣は率直な議論を奨励します。優先順位の理由を説明し、よく考えられた異論を歓迎し、根拠によって理解が深まったときには方向を改めます。</span>
+            </p>
+          </div>
+        </li>
+        <li class="principle reveal" style="--v: var(--v1)">
+          <button class="tone" type="button" data-note="1" data-voice="1">
+            <span class="dot">3</span><span class="tn"><b><span class="en">3rd</span><span class="ja">3度</span></b><small><span class="en">Play note E</span><span class="ja">ミの音</span></small></span>
+          </button>
+          <h3><span class="en">Make our products <em>good neighbors.</em></span><span class="ja">製品を、<em>良き隣人</em>に。</span></h3>
+          <div class="pb">
+            <p>
+              <span class="en">A useful product should work well within a wider environment.</span>
+              <span class="ja">役に立つ製品は、より広い環境の中でうまく機能するものであるべきです。</span>
+            </p>
+            <p>
+              <span class="en">We develop clear interfaces, support appropriate standards, and make connections with other systems understandable. Customers should have practical ways to manage their information and incorporate our products into their existing work.</span>
+              <span class="ja">わかりやすいインターフェースを開発し、適切な標準規格に対応し、他のシステムとの連携を理解しやすいものにします。お客さまが自らの情報を管理し、私たちの製品を今の業務に組み込むための実用的な手段を持てるようにします。</span>
+            </p>
+            <p>
+              <span class="en">We choose access arrangements and technical designs according to the customer's needs. Compatibility, responsible handling of information, and reliable operation guide those choices.</span>
+              <span class="ja">提供形態や技術設計は、お客さまのニーズに合わせて選びます。その判断の指針となるのは、互換性、情報の責任ある取り扱い、そして安定した運用です。</span>
+            </p>
+          </div>
+        </li>
+        <li class="principle reveal" style="--v: var(--v2)">
+          <button class="tone" type="button" data-note="2" data-voice="2">
+            <span class="dot">5</span><span class="tn"><b><span class="en">5th</span><span class="ja">5度</span></b><small><span class="en">Play note G</span><span class="ja">ソの音</span></small></span>
+          </button>
+          <h3><span class="en">Listen before <em>you solo.</em></span><span class="ja">ソロの前に、<em>耳を澄ます。</em></span></h3>
+          <div class="pb">
+            <p>
+              <span class="en">Jazz inspires us to combine individual initiative with attention to the whole performance.</span>
+              <span class="ja">ジャズは、一人ひとりの主体性と、演奏全体への気配りを両立させることを教えてくれます。</span>
+            </p>
+            <p>
+              <span class="en">When someone has the expertise to lead, we give them responsibility and support. When others are leading, we contribute through careful listening, useful feedback, and dependable follow-through.</span>
+              <span class="ja">リードするだけの専門性を持つ人には、責任と支援を託します。他の誰かがリードしているときは、注意深く耳を傾け、役に立つフィードバックを返し、最後まで確実にやり遂げることで貢献します。</span>
+            </p>
+            <p>
+              <span class="en">We apply the same attention to customers. Their experience helps determine where a product needs refinement, which problems deserve investment, and when our original assumptions need to change.</span>
+              <span class="ja">お客さまにも同じように耳を傾けます。お客さまの体験は、製品のどこを磨くべきか、どの課題に投資すべきか、そしていつ当初の前提を見直すべきかを決める手がかりになります。</span>
+            </p>
+          </div>
+        </li>
+        <li class="principle reveal" style="--v: var(--v3)">
+          <button class="tone" type="button" data-note="3" data-voice="3">
+            <span class="dot">7</span><span class="tn"><b><span class="en">7th</span><span class="ja">7度</span></b><small><span class="en">Play note B</span><span class="ja">シの音</span></small></span>
+          </button>
+          <h3><span class="en">Give experimentation <em>a clear purpose.</em></span><span class="ja">実験には、<em>明確な目的</em>を。</span></h3>
+          <div class="pb">
+            <p>
+              <span class="en">New ideas need room to develop. We support research and small experiments that answer worthwhile questions.</span>
+              <span class="ja">新しいアイデアが育つには余地が必要です。私たちは、問う価値のある問いに答えるための研究や小さな実験を支援します。</span>
+            </p>
+            <p>
+              <span class="en">Teams define what they hope to learn, work within an appropriate budget, and evaluate the results honestly. Promising discoveries move into practical trials with users. Findings that challenge our plans are shared and used to improve our judgment.</span>
+              <span class="ja">チームは何を学びたいのかを定め、適切な予算の範囲で取り組み、結果を誠実に評価します。有望な発見は、ユーザーとの実地での試行へと進みます。計画に疑問を投げかける発見も共有し、判断を磨くために生かします。</span>
+            </p>
+            <p>
+              <span class="en">We also look for new uses for existing knowledge and technology. Previous work can become the starting point for a better approach.</span>
+              <span class="ja">既存の知識や技術の新しい使い道も探ります。これまでの仕事が、より良いアプローチの出発点になることもあります。</span>
+            </p>
+          </div>
+        </li>
+        <li class="principle reveal" style="--v: var(--v4)">
+          <button class="tone" type="button" data-note="4" data-voice="4">
+            <span class="dot">9</span><span class="tn"><b><span class="en">9th</span><span class="ja">9度</span></b><small><span class="en">Play note D</span><span class="ja">レの音</span></small></span>
+          </button>
+          <h3><span class="en">Keep a <em>dependable rhythm.</em></span><span class="ja"><em>信頼できるリズム</em>を保つ。</span></h3>
+          <div class="pb">
+            <p>
+              <span class="en">Creative work needs consistent delivery behind it.</span>
+              <span class="ja">創造的な仕事には、それを支える着実な提供が欠かせません。</span>
+            </p>
+            <p>
+              <span class="en">We make realistic commitments, communicate progress clearly, and maintain what we release. Product quality includes the experience of getting help, receiving updates, and continuing to use a service over time.</span>
+              <span class="ja">現実的な約束をし、進捗をはっきりと伝え、リリースしたものを保守し続けます。製品の品質には、サポートを受ける体験、アップデートを受け取る体験、そしてサービスを長く使い続ける体験も含まれます。</span>
+            </p>
+            <p>
+              <span class="en">We measure success through the work customers can complete, the value they receive, and their decision to keep using our products.</span>
+              <span class="ja">私たちは成功を、お客さまが成し遂げられた仕事、受け取った価値、そして私たちの製品を使い続けるというご判断によって測ります。</span>
+            </p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ Creating with the world ============ -->
+  <section class="section world" id="world" aria-labelledby="world-title">
+    <div class="wrap">
+      <div class="section-head stack reveal">
+        <div>
+          <p class="label"><span class="en">Creating with the world</span><span class="ja">世界と共に創る</span></p>
+          <h2 id="world-title"><span class="en">International collaboration begins when we decide which problems to solve.</span><span class="ja">国際的な協働は、どの課題を解くかを決めるところから始まります。</span></h2>
+        </div>
+        <p class="lead">
+          <span class="en">People from different regions take part from the first question, not only at the end. Here is how we make that work.</span>
+          <span class="ja">さまざまな地域の人々が、最後だけでなく最初の問いから参加します。そのために、私たちは次のことを大切にしています。</span>
+        </p>
+      </div>
+
+      <div class="world-grid">
+        <article class="world-item reveal">
+          <svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="22" cy="22" r="17"/><path d="M5 22h34M22 5c5 5 7 11 7 17s-2 12-7 17c-5-5-7-11-7-17s2-12 7-17z"/>
+          </svg>
+          <h3><span class="en">From the first question</span><span class="ja">最初の問いから</span></h3>
+          <p>
+            <span class="en">We involve people from different regions in research, design, development, and evaluation. Their knowledge shapes product behavior, language, accessibility, and the expectations our services need to meet.</span>
+            <span class="ja">研究、設計、開発、評価のそれぞれに、さまざまな地域の人々に参加してもらいます。その知見が、製品のふるまい、言葉づかい、アクセシビリティ、そしてサービスが応えるべき期待を形づくります。</span>
+          </p>
+        </article>
+        <article class="world-item reveal">
+          <svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M22 4c-6 0-11 5-11 11 0 8 11 19 11 19s11-11 11-19c0-6-5-11-11-11z"/><circle cx="22" cy="15" r="4"/><path d="M8 40h28"/>
+          </svg>
+          <h3><span class="en">Regional voices decide</span><span class="ja">地域の声が、決定を動かす</span></h3>
+          <p>
+            <span class="en">Regional collaborators have meaningful influence over decisions affecting their markets. Engineers, designers, researchers, and customer-facing teams share responsibility for the experience we deliver.</span>
+            <span class="ja">各地域の協力者は、自らの市場に関わる決定に対して実質的な影響力を持ちます。エンジニア、デザイナー、研究者、そしてお客さまと接するチームが、私たちの届ける体験に共に責任を持ちます。</span>
+          </p>
+        </article>
+        <article class="world-item reveal">
+          <svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="5" y="8" width="34" height="30" rx="4"/><path d="M5 16h34M13 4v8M31 4v8M12 24h6M12 30h12M26 24h6"/>
+          </svg>
+          <h3><span class="en">Participation made practical</span><span class="ja">参加しやすい仕組み</span></h3>
+          <p>
+            <span class="en">We make participation practical through clear documentation, thoughtful scheduling, and respect for different communication styles.</span>
+            <span class="ja">わかりやすいドキュメント、時差に配慮したスケジュール調整、そして多様なコミュニケーションのスタイルへの敬意によって、参加を現実的なものにします。</span>
+          </p>
+        </article>
+        <article class="world-item reveal">
+          <svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="22" cy="17" r="11"/><path d="M22 11l1.8 3.7 4 .6-2.9 2.8.7 4-3.6-1.9-3.6 1.9.7-4-2.9-2.8 4-.6z"/><path d="M15 26l-3 14 10-5 10 5-3-14"/>
+          </svg>
+          <h3><span class="en">Recognition and growth</span><span class="ja">正当な評価と成長</span></h3>
+          <p>
+            <span class="en">Contributions receive recognition and fair compensation, and partnerships create opportunities for learning and growth.</span>
+            <span class="ja">貢献は正当に認められ、公正な報酬で報われます。そしてパートナーシップは、学びと成長の機会を生み出します。</span>
+          </p>
+        </article>
+      </div>
+    </div>
+
+    <div class="finale">
+      <img class="finale-bg" src="images/photos/harbor-night.jpg" width="1920" height="1160" alt="" loading="lazy" decoding="async">
+      <div class="wrap">
+        <blockquote class="reveal">
+          <span class="en">Yokohama gives our company its inspiration. Our products take shape through the people we work with around the world.</span>
+          <span class="ja">横浜は、私たちの会社にインスピレーションを与えてくれます。そして私たちの製品は、世界中で共に働く人々を通じて形になります。</span>
+        </blockquote>
+        <p class="hope reveal">
+          <span class="en">We want customers to feel confident using what we create, and collaborators to recognize the influence of their ideas in the finished work.</span>
+          <span class="ja">お客さまには安心して私たちの製品を使っていただき、協力者の皆さまには、完成したものの中に自らのアイデアが生きていることを感じていただきたい。それが私たちの願いです。</span>
+        </p>
+        <p class="motto-close reveal">Open first. Play together.　<span lang="ja">まず、ひらく。共に、奏でる。</span></p>
+
+        <div class="join">
+          <div class="join-card reveal">
+            <h3><span class="en">Work with us</span><span class="ja">一緒に働く</span></h3>
+            <p>
+              <span class="en">Engineers, designers, researchers, and customer-facing specialists from any region: bring your expertise into a shared creative effort.</span>
+              <span class="ja">どの地域のエンジニア、デザイナー、研究者、お客さま対応のスペシャリストも歓迎します。あなたの専門性を、共につくる仕事に持ち寄ってください。</span>
+            </p>
+            <a class="btn btn-brass" href="#contact"><span class="en">Get in touch</span><span class="ja">問い合わせる</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          </div>
+          <div class="join-card reveal">
+            <h3><span class="en">Partner with us</span><span class="ja">パートナーになる</span></h3>
+            <p>
+              <span class="en">Customers, researchers, and business partners: tell us about the workflow you want to improve, and let's work out the first step together.</span>
+              <span class="ja">お客さま、研究者、ビジネスパートナーの皆さま。改善したい業務の流れをお聞かせください。最初の一歩を一緒に考えます。</span>
+            </p>
+            <a class="btn btn-ghost" href="#call"><span class="en">Book a call</span><span class="ja">通話を予約する</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          </div>
+        </div>
+        <p class="photo-cap"><span class="en">Minato Mirai 21 across the harbor at night</span><span class="ja">夜の港越しに望む、みなとみらい21</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Book a call ============ -->
+  <section class="section call" id="call" aria-labelledby="call-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <p class="label"><span class="en">Book a call</span><span class="ja">通話を予約</span></p>
+          <h2 id="call-title"><span class="en">Start with an open conversation.</span><span class="ja">まずは、開かれた対話から。</span></h2>
+        </div>
+        <p class="lead">
+          <span class="en">Pick a time for a 30-minute video call, wherever you are. Times are shown in your own time zone, and you'll get a confirmation email as soon as you book.</span>
+          <span class="ja">世界のどこからでも、30分のビデオ通話のご都合のよい時間をお選びください。時間はお使いのタイムゾーンで表示され、予約が完了するとすぐに確認メールが届きます。</span>
+        </p>
+      </div>
+
+      <div class="call-panel reveal">
+        <div class="calendly-embed" id="calendlyEmbed">
+          <p class="calendly-wait"><span class="en">Loading the calendar…</span><span class="ja">予定表を読み込んでいます…</span></p>
+        </div>
+      </div>
+      <p class="call-fallback">
+        <span class="en">Calendar not showing? <a data-calendly-link href="https://calendly.com/yutosuzuki-namichordlabs/30min" target="_blank" rel="noopener">Open the booking page on Calendly</a>, or email us at <a data-contact-email href="mailto:yutosuzuki@namichordlabs.com">yutosuzuki@namichordlabs.com</a>.</span>
+        <span class="ja">予定表が表示されない場合は、<a data-calendly-link href="https://calendly.com/yutosuzuki-namichordlabs/30min" target="_blank" rel="noopener">Calendlyの予約ページ</a>を開くか、<a data-contact-email href="mailto:yutosuzuki@namichordlabs.com">yutosuzuki@namichordlabs.com</a> までメールでご連絡ください。</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ Contact ============ -->
+  <section class="section contact" id="contact" aria-labelledby="contact-title">
+    <div class="wrap contact-grid">
+      <div class="contact-info reveal">
+        <p class="label"><span class="en">Contact</span><span class="ja">お問い合わせ</span></p>
+        <h2 id="contact-title"><span class="en">Tell us what you’re working on.</span><span class="ja">取り組んでいることを、お聞かせください。</span></h2>
+        <p class="lead">
+          <span class="en">A problem worth solving, an idea to explore, or a way you'd like to collaborate from anywhere in the world. We reply in English or Japanese.</span>
+          <span class="ja">解決したい課題、試してみたいアイデア、世界のどこからでも一緒に取り組みたいこと。日本語・英語のどちらでもご返信します。</span>
+        </p>
+        <dl class="details">
+          <div><dt><span class="en">Based in</span><span class="ja">拠点</span></dt><dd><span class="en">Yokohama, Kanagawa, Japan</span><span class="ja">神奈川県横浜市</span></dd></div>
+          <div><dt><span class="en">Languages</span><span class="ja">対応言語</span></dt><dd>English · 日本語</dd></div>
+        </dl>
+      </div>
+
+      <div class="reach reveal">
+        <div class="reach-card">
+          <p class="reach-k"><span class="en">Write to us</span><span class="ja">メールで</span></p>
+          <a class="reach-mail" data-contact-email href="mailto:yutosuzuki@namichordlabs.com">yutosuzuki@namichordlabs.com</a>
+          <p class="reach-note">
+            <span class="en">Tell us about the problem, the idea, or the way you'd like to work together. We reply in English or Japanese.</span>
+            <span class="ja">課題、アイデア、あるいは一緒に取り組みたいことをお聞かせください。日本語・英語のどちらでもご返信します。</span>
+          </p>
+        </div>
+        <div class="reach-card">
+          <p class="reach-k"><span class="en">Or talk with us</span><span class="ja">または、通話で</span></p>
+          <p class="reach-note">
+            <span class="en">Pick a time for a 30-minute video call, shown in your own time zone.</span>
+            <span class="ja">30分のビデオ通話を、お使いのタイムゾーンでご都合のよい時間にご予約いただけます。</span>
+          </p>
+          <a class="btn btn-ink" href="#call"><span class="en">Book a call</span><span class="ja">通話を予約する</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <svg class="footer-waves" viewBox="0 0 1440 46" preserveAspectRatio="none" aria-hidden="true">
+    <g fill="none" stroke-width="1.6">
+      <path d="M0 10C120 2 240 18 360 10S600 2 720 10 960 18 1080 10 1320 2 1440 10" stroke="#78c4c1" opacity=".55"/>
+      <path d="M0 18C120 10 240 26 360 18S600 10 720 18 960 26 1080 18 1320 10 1440 18" stroke="#e9b44c" opacity=".5"/>
+      <path d="M0 26C120 18 240 34 360 26S600 18 720 26 960 34 1080 26 1320 18 1440 26" stroke="#ec8b6b" opacity=".45"/>
+      <path d="M0 34C120 26 240 42 360 34S600 26 720 34 960 42 1080 34 1320 26 1440 34" stroke="#a99cf0" opacity=".4"/>
+      <path d="M0 42C120 34 240 50 360 42S600 34 720 42 960 50 1080 42 1320 34 1440 42" stroke="#8ec5f2" opacity=".35"/>
+    </g>
+  </svg>
+  <div class="wrap">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <a class="brand" href="#top">
+          <svg viewBox="0 0 40 40" aria-hidden="true"><use href="#logo"/></svg>
+          <span class="brand-name">NamiChord<small>LABS</small></span>
+        </a>
+        <p class="fmotto">Open first. Play together.</p>
+        <p class="fmotto-ja" lang="ja">まず、ひらく。共に、奏でる。</p>
+        <p><span class="en">NamiChordLabs (NCL) · Yokohama, Japan</span><span class="ja">NamiChordLabs（NCL）· 神奈川県横浜市</span></p>
+      </div>
+      <ul class="footer-nav">
+        <li><a href="#motto"><span class="en">Our motto</span><span class="ja">モットー</span></a></li>
+        <li><a href="#story"><span class="en">Our Yokohama story</span><span class="ja">私たちの横浜物語</span></a></li>
+        <li><a href="#vision"><span class="en">Vision</span><span class="ja">ビジョン</span></a></li>
+        <li><a href="#business"><span class="en">Business direction</span><span class="ja">事業の方向性</span></a></li>
+        <li><a href="#philosophy"><span class="en">Management philosophy</span><span class="ja">経営理念</span></a></li>
+        <li><a href="#world"><span class="en">Creating with the world</span><span class="ja">世界と共に創る</span></a></li>
+        <li><a href="#call"><span class="en">Book a call</span><span class="ja">通話を予約</span></a></li>
+        <li><a href="#contact"><span class="en">Contact</span><span class="ja">お問い合わせ</span></a></li>
+      </ul>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year">2026</span> NamiChordLabs</span>
+      <span><span class="en">Made in Yokohama, with the world.</span><span class="ja">横浜から、世界と共に。</span></span>
+      <p class="credits" id="credits">
+        <span class="en">Images via Wikimedia Commons (resized and cropped for display):</span><span class="ja">画像提供（Wikimedia Commons、表示用にリサイズ・トリミング）：</span>
+        <a href="https://commons.wikimedia.org/wiki/File:%E3%80%8C%E6%A8%AA%E6%B5%9C%E4%BA%A4%E6%98%93%E8%A5%BF%E6%B4%8B%E4%BA%BA%E8%8D%B7%E7%89%A9%E9%81%8B%E9%80%81%E4%B9%8B%E5%9C%96%E3%80%8D-%E2%80%9CYokohama_Trade-_Westerners_Loading_Cargo%E2%80%9D_MET_DP147981.jpg">Yokohama Trade: Westerners Loading Cargo</a> by Utagawa Sadahide, 1861, The Metropolitan Museum of Art (<a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>) ·
+        <a href="https://commons.wikimedia.org/wiki/File:First_steam_train_leaving_Yokohama.jpg">Steam Train Departing from Yokohama</a> by Utagawa Kunisada III, 1872, Library of Congress (public domain) ·
+        <a href="https://commons.wikimedia.org/wiki/File:%E6%A8%AA%E6%B5%9C%E3%81%AE%E8%A8%98%E5%BF%B5%E7%A2%91(20201212)_03.jpg">Gas lamps on Bashamichi</a> by 経済特区 (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>) ·
+        <a href="https://commons.wikimedia.org/wiki/File:US_Navy_051120-N-5952N-002_The_Commander,_U.S._Seventh_Fleet_Band_performs_in_front_of_the_exhibit_ship_Nippon_Maru_near_the_Yokohama_Maritime_Museum.jpg">Concert in front of the Nippon Maru</a>, U.S. Navy photo by Brian Naranjo (public domain) ·
+        <a href="https://commons.wikimedia.org/wiki/File:The_night_view_of_Minato_Mirai_21_-_4.jpg">The night view of Minato Mirai 21</a> by Kakidai (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>) ·
+        <a href="https://commons.wikimedia.org/wiki/File:Yokohama_Red_Brick_Warehouse_2012.JPG">Yokohama Red Brick Warehouse</a> by Kakidai (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>).
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ==========================================================
+   Contact settings
+   ========================================================== */
+const CONTACT_CONFIG = {
+  // Shown on the site for visitors to write to from their own email app.
+  // The site never sends mail itself, so nothing here needs setting up.
+  toEmail: 'yutosuzuki@namichordlabs.com',
+
+  // 30-minute call booking page. Availability, time zones and confirmations are managed in Calendly.
+  calendlyUrl: 'https://calendly.com/yutosuzuki-namichordlabs/30min'
+};
+
+(function () {
+  var root = document.documentElement;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- Language ---------- */
+  var TITLES = {
+    en: 'NamiChordLabs (NCL) — Open first. Play together.',
+    ja: 'NamiChordLabs（NCL）— まず、ひらく。共に、奏でる。'
+  };
+  function lang() { return root.classList.contains('lang-ja') ? 'ja' : 'en'; }
+  function applyAttrI18n() {
+    var l = lang();
+    document.querySelectorAll('.tone').forEach(function (b) {
+      var n = b.querySelector('.tn small .' + l);
+      b.setAttribute('aria-label', (l === 'ja' ? '音を鳴らす：' : 'Play: ') + b.querySelector('.tn b .' + l).textContent + ' (' + (n ? n.textContent : '') + ')');
+    });
+  }
+  function setLang(l) {
+    root.classList.toggle('lang-ja', l === 'ja');
+    root.lang = l;
+    document.title = TITLES[l];
+    try { localStorage.setItem('ncl-lang', l); } catch (e) {}
+    applyAttrI18n();
+    document.dispatchEvent(new CustomEvent('langchange'));
+  }
+  setLang(lang());
+  document.getElementById('langBtn').addEventListener('click', function () {
+    setLang(lang() === 'ja' ? 'en' : 'ja');
+  });
+
+  /* ---------- Mobile menu ---------- */
+  var menuBtn = document.getElementById('menuBtn');
+  var navLinks = document.getElementById('navLinks');
+  function closeMenu() { navLinks.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); }
+  menuBtn.addEventListener('click', function () {
+    var open = navLinks.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', String(open));
+  });
+  navLinks.addEventListener('click', function (e) { if (e.target.closest('a')) closeMenu(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(); });
+
+  /* ---------- Header background on scroll ---------- */
+  var header = document.querySelector('.site-header');
+  function onScroll() { header.classList.toggle('scrolled', window.scrollY > 40); }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ---------- Reveal on scroll ---------- */
+  var reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window && !reduceMotion) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(function (el) { io.observe(el); });
+  } else {
+    reveals.forEach(function (el) { el.classList.add('in'); });
+  }
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* ==========================================================
+     Music. Nothing here makes a sound until someone asks for it:
+     a play button, a note, or the hero's sound switch.
+     ========================================================== */
+  var NOTES = [261.63, 329.63, 392.00, 493.88, 587.33];   // Cmaj9 for the five principles: C4 E4 G4 B4 D5
+  var energy = [0, 0, 0, 0, 0];                           // how brightly each voice glows in the hero's sea
+  var actx = null, bus = null, out = null, noise = null;
+  var heroTogether = null;                                 // set by the hero, so a chord played below can light up the harbor
+
+  function audio() {
+    if (!actx) {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      actx = new AC();
+      // a soft electric-piano tone through a little room echo
+      var lp = actx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2400; lp.Q.value = 0.4;
+      out = actx.createGain(); out.gain.value = 0.2;
+      var delay = actx.createDelay(1); delay.delayTime.value = 0.27;
+      var fb = actx.createGain(); fb.gain.value = 0.26;
+      var wet = actx.createGain(); wet.gain.value = 0.2;
+      lp.connect(out); lp.connect(delay); delay.connect(fb); fb.connect(delay); delay.connect(wet); wet.connect(out);
+      out.connect(actx.destination);
+      bus = lp;
+      // one second of noise, reused for the ride cymbal
+      noise = actx.createBuffer(1, actx.sampleRate, actx.sampleRate);
+      var d = noise.getChannelData(0);
+      for (var i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    }
+    if (actx.state === 'suspended') actx.resume();
+    return actx;
+  }
+  function tone(freq, when, dur, vel) {
+    var a = actx;
+    var g = a.createGain();
+    g.gain.setValueAtTime(0.0001, when);
+    g.gain.exponentialRampToValueAtTime(vel, when + 0.018);
+    g.gain.exponentialRampToValueAtTime(vel * 0.35, when + 0.5);
+    g.gain.exponentialRampToValueAtTime(0.0001, when + dur);
+    g.connect(bus);
+    [[1, 'sine', 1], [2, 'sine', 0.22], [3, 'triangle', 0.06], [4.01, 'sine', 0.03]].forEach(function (p) {
+      var o = a.createOscillator(); o.type = p[1]; o.frequency.value = freq * p[0];
+      var og = a.createGain(); og.gain.value = p[2];
+      o.connect(og); og.connect(g);
+      o.start(when); o.stop(when + dur + 0.1);
+    });
+  }
+  function bass(freq, when, vel) {
+    var a = actx, g = a.createGain(), o = a.createOscillator(), o2 = a.createOscillator(), g2 = a.createGain();
+    o.type = 'sine'; o.frequency.value = freq;
+    o2.type = 'triangle'; o2.frequency.value = freq * 2; g2.gain.value = 0.15;
+    g.gain.setValueAtTime(0.0001, when);
+    g.gain.exponentialRampToValueAtTime(vel, when + 0.015);
+    g.gain.exponentialRampToValueAtTime(0.0001, when + 1.1);
+    o.connect(g); o2.connect(g2); g2.connect(g); g.connect(out);
+    o.start(when); o2.start(when); o.stop(when + 1.2); o2.stop(when + 1.2);
+  }
+  function ride(when, vel) {
+    var a = actx, src = a.createBufferSource(), hp = a.createBiquadFilter(), pk = a.createBiquadFilter(), g = a.createGain();
+    src.buffer = noise;
+    hp.type = 'highpass'; hp.frequency.value = 6000;
+    pk.type = 'peaking'; pk.frequency.value = 8500; pk.Q.value = 2; pk.gain.value = 8;
+    g.gain.setValueAtTime(vel, when);
+    g.gain.exponentialRampToValueAtTime(0.0001, when + 0.5);
+    src.connect(hp); hp.connect(pk); pk.connect(g); g.connect(out);
+    src.start(when, Math.random() * 0.4); src.stop(when + 0.55);
+  }
+  function ring(i) {
+    energy[i] = 1;
+    document.querySelectorAll('[data-voice="' + i + '"]').forEach(function (el) {
+      el.classList.remove('ring'); void el.getBoundingClientRect(); el.classList.add('ring');
+    });
+  }
+  function playVoice(i, delay) {
+    var a = audio();
+    if (a) tone(NOTES[i], a.currentTime + 0.01 + delay, 3.4, 0.3);
+    setTimeout(function () { ring(i); }, delay * 1000);
+  }
+  function playChord() {
+    var a = audio();
+    if (a) tone(130.81, a.currentTime + 0.01, 3.8, 0.2);   // a low C underneath
+    for (var i = 0; i < 5; i++) playVoice(i, i * 0.12);
+    if (heroTogether) heroTogether();
+  }
+  document.querySelectorAll('[data-play-chord]').forEach(function (b) { b.addEventListener('click', playChord); });
+  document.querySelectorAll('.tone').forEach(function (b) {
+    b.addEventListener('click', function () { playVoice(+b.dataset.note, 0); });
+    b.addEventListener('animationend', function () { b.classList.remove('ring'); });
+  });
+  document.querySelectorAll('.staff .note').forEach(function (n) {
+    n.addEventListener('animationend', function () { n.classList.remove('ring'); });
+  });
+
+  /* ==========================================================
+     Hero: our motto, acted out on Yokohama harbor. One cycle is four bars of music (about 13 seconds).
+     1 · Open first    A doorway of light opens on the water. Ideas arrive from every direction,
+                       pass through it and land in the harbor, each one waking a voice of the sea.
+     2 · Play together The five voices rise out of the sea and become a staff. The ideas become notes,
+                       and the notes stack into one chord: the water moves as one, and fireworks go up.
+     The headline and the captions follow along, the chord panel shows the harmony
+     (ii–V while the door is open, I when we play together), and with sound on you hear it.
+     Tap the harbor to add a firework and a note of your own.
+     ========================================================== */
+  (function () {
+    var hero = document.querySelector('.hero');
+    var canvas = document.getElementById('sea');
+    var copy = document.querySelector('.hero-copy');
+    if (!hero || !canvas || !canvas.getContext) return;
+    var ctx = canvas.getContext('2d');
+    var skyL = document.createElement('canvas'), cityL = document.createElement('canvas');
+    var scope = document.querySelector('.jam .scope'), sctx = scope && scope.getContext('2d');
+    var chips = document.querySelectorAll('.jam .chords li');
+    var beatDot = document.querySelector('.jam .beat');
+    var soundBtn = document.getElementById('soundBtn');
+    var capOpen = document.getElementById('capOpen'), capPlay = document.getElementById('capPlay');
+    var VOICES = ['#78c4c1', '#e9b44c', '#ec8b6b', '#a99cf0', '#8ec5f2'];
+    var VRGB = VOICES.map(function (c) { return [parseInt(c.substr(1, 2), 16), parseInt(c.substr(3, 2), 16), parseInt(c.substr(5, 2), 16)]; });
+    var GW = 760;   // width of the skyline group, in skyline units (1 unit ≈ 1 m of building height)
+
+    // ii–V–I in C: one bar each, then the home chord held for a second bar.
+    // Five voices move smoothly from chord to chord; each row of the sea follows one voice.
+    // h: how much the rows move as one. chop: how restless the water is. scale: notes a tap can play over this chord.
+    var BAR = 3.2, BEAT = BAR / 4, CYCLE = BAR * 4;
+    var DM9 = { notes: [146.83, 174.61, 220.00, 261.63, 329.63], bass: [73.42, 110.00], h: 0.2, chop: 0.3, chip: 0,
+                scale: [293.66, 349.23, 392.00, 440.00, 523.25, 587.33, 659.25, 698.46, 880.00] };
+    var G13 = { notes: [98.00, 174.61, 220.00, 246.94, 329.63], bass: [98.00, 73.42], h: 0.04, chop: 0.75, chip: 1,
+                scale: [293.66, 329.63, 392.00, 440.00, 493.88, 587.33, 659.25, 698.46, 783.99] };
+    var CM9 = { notes: [130.81, 164.81, 196.00, 246.94, 293.66], bass: [65.41, 98.00], h: 0.94, chop: 0, chip: 2,
+                scale: [329.63, 392.00, 440.00, 493.88, 523.25, 587.33, 659.25, 783.99, 880.00] };
+    var CM9b = { notes: CM9.notes, bass: [65.41, 82.41], h: CM9.h, chop: 0, chip: 2, scale: CM9.scale };
+    var PROG = [DM9, G13, CM9, CM9b];
+
+    // The two acts, in seconds from the start of a cycle
+    var ACT2 = BAR * 2;                                             // "play together" begins with the home chord
+    var COMET = { start: 1.3, every: 0.6, leg: 2.45, pass: 1.48 };  // pass: when a comet goes through the doorway
+    var NOTE = { start: 0.5, every: 0.24, fly: 1.0 };               // relative to ACT2
+    var CHORD = 2.9, FADE = 5.6;                                    // relative to ACT2
+
+    // Skyline silhouettes in units: x across, y up from the waterline (negative = higher)
+    var SKY = [
+      ['M0 0V-30H26V-46H58V-26H96V0Z', '#0f1d31'],                                                          // Pacifico & low blocks
+      ['M128 0L133 -110Q139 -228 146 -288L151 -296H189L194 -288Q201 -228 207 -110L212 0Z', '#0c1829'],     // Landmark Tower
+      ['M98 0V-40H240V0Z', '#0f1d31'],                                                                      // Landmark Plaza
+      ['M258 0V-176L298 -164V0Z', '#0d1a2c'],                                                               // Queen's Square A
+      ['M304 0V-142L340 -132V0Z', '#0e1b2e'],                                                               // Queen's Square B
+      ['M346 0V-114L380 -106V0Z', '#0f1c30'],                                                               // Queen's Square C
+      ['M250 0V-30H392V0Z', '#101f33'],
+      ['M392 0V-22H426V-32H476V0Z', '#0f1d31'],
+      ['M420 0V-12H486V0Z', '#111f33'],
+      ['M612 0V-18H690V-28H732V-14H760V0Z', '#0f1d31']
+    ];
+    var SAIL = 'M520 0C521 -48 535 -88 552 -110C564 -88 586 -46 606 0Z';                                     // InterContinental
+    var WHEEL = { x: 452, y: -64, r: 52 };                                                                    // Cosmo Clock 21
+    var TOWERS = [
+      { x0: 140, x1: 200, top: -282, taper: 10 },
+      { x0: 262, x1: 294, top: -160, taper: 0 },
+      { x0: 308, x1: 336, top: -128, taper: 0 },
+      { x0: 350, x1: 376, top: -102, taper: 0 },
+      { x0: 6, x1: 90, top: -26, taper: 0 },
+      { x0: 104, x1: 236, top: -34, taper: 0 }
+    ];
+    var CRANE = 'M0 0V-40H3V0ZM24 0V-40H27V0ZM-2 -40H29V-44H-2ZM-36 -46H54V-49H-36ZM12 -49L14 -64L16 -49Z';
+    // Ships, bow towards +x: a liner far out, and a small water bus closer in
+    var LINER = {
+      body: [['M-52 0L48 0L58 -9L-55 -9Z', '#09131f'], ['M-44 -9V-15H34V-9Z', '#0d1a2b'], ['M-36 -15V-20H20V-15Z', '#0f1e31'], ['M-20 -20L-18 -27H-11L-12 -20Z', '#0d1a2b']],
+      lights: (function () { var l = [], x; for (x = -40; x <= 30; x += 4) l.push([x, -12.6]); for (x = -32; x <= 16; x += 4) l.push([x, -17.6]); return l; })(),
+      mast: [24, -24], len: 110
+    };
+    var BOAT = { body: [['M-24 0L20 0L27 -6L-25 -7Z', '#09131f'], ['M-16 -7V-12H12V-7Z', '#0e1c2f']], band: [-14, -11, 24, 2.4], mast: [8, -14], len: 52 };
+    [LINER, BOAT].forEach(function (def) { def.body = def.body.map(function (p) { return [new Path2D(p[0]), p[1]]; }); });
+
+    var W = 0, H = 0, dpr = 1, HZ = 0, seaH = 0, s = 1, ox = 0, sc = 1, sc2 = 1, stacked = false, lite = false, skyTop = 96, skyLeft = 0;
+    var stage = { x0: 0, x1: 0, y0: 0 }, door = { x: 0, w: 0, h: 0, bottom: 0, d: 0.1 }, staff = { x0: 0, x1: 0, y: 0, gap: 14, A: 9, cx: 0 };
+    var rows = [], rowFor = [], wins = [], refl = [], blinks = [], stars = [], comets = [], landX = [0, 0, 0, 0, 0];
+    var rings = [], skyRings = [], rockets = [], sparks = [], flashes = [], ships = [];
+    var kr = DM9.notes.map(function (f) { return f / 130.81; });   // each voice's pitch relative to C3, gliding between chords
+    var T = 0, h = 0.2, chop = 0.3, lastBeat = -1, shownChip = -1, shownAct = '', turn = 0, sweepAt = -99, togetherAt = -99, doorGlow = 0;
+    var cycleN = -1, fired = null;
+    var px = -9999, pe = 0, lastRing = 0;
+    var running = false, raf = 0;
+    var soundOn = false, timer = 0, nextBeat = 0, aOff = 0;
+
+    // One clock for picture and music. It stops while the hero is off screen, so nothing plays to an empty room.
+    var t0 = performance.now(), held = 0, heldAt = 0, frozen = false;
+    function clock() { return ((frozen ? heldAt : performance.now()) - t0 - held) / 1000; }
+
+    function rng(seed) { return function () { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }; }
+    function clamp01(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
+    function smooth(x, a, b) { var t = clamp01((x - a) / (b - a)); return t * t * (3 - 2 * t); }
+    function easeOut(u) { return 1 - Math.pow(1 - u, 3); }
+    function easeInOut(u) { return u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2; }
+    function rgba(c, a) { return 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + Math.max(0, a).toFixed(3) + ')'; }
+    function U(x) { return ox + x * s; }
+    function V(y) { return HZ + y * s; }
+    function rowY(t) { return HZ + 4 + (seaH - 8) * Math.pow(t, 1.45); }
+    function depthAt(y) { return Math.pow(clamp01((y - HZ - 4) / (seaH - 8)), 1 / 1.45); }
+    function voiceAt(y) {
+      var t = depthAt(y), best = 0, bd = 9;
+      for (var i = 0; i < rows.length; i++) { var d = Math.abs(rows[i].t - t); if (d < bd) { bd = d; best = rows[i].v; } }
+      return best;
+    }
+    function chordAt(t) { return PROG[Math.floor(t / BAR) % 4]; }
+    function cycleTime() { return T - Math.floor(T / CYCLE) * CYCLE; }
+
+    /* ---------- Layout and the parts that never move ---------- */
+    function layout() {
+      var r = hero.getBoundingClientRect(), vh = window.innerHeight;
+      W = Math.round(r.width);
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      lite = W < 760;
+      seaH = Math.round(Math.max(130, Math.min(300, vh * (W < 900 ? 0.2 : 0.25))));
+      var textRight = copy.getBoundingClientRect().right - r.left;
+      var avail = W - textRight - Math.max(16, W * 0.025);
+      if (avail / GW >= 0.42) {
+        // wide screens: the skyline and the two symbols stand to the right of the text
+        stacked = false;
+        s = Math.min(1.12, avail / GW);
+      } else {
+        // narrow screens: they sit below the text, with a little extra sky for the symbols
+        stacked = true;
+        s = Math.min(0.6, (W - 24) / GW);
+      }
+      var clear = stacked ? seaH + 300 * s + 140 : seaH + 50 * Math.min(s, 1) + 14;
+      hero.style.setProperty('--clear', Math.round(clear) + 'px');
+      H = Math.round(hero.getBoundingClientRect().height);
+      HZ = H - seaH;
+      if (!stacked) s = Math.min(s, (HZ - 110) / 300);      // keep Landmark Tower clear of the header
+      ox = stacked ? (W - GW * s) / 2 : W - GW * s - Math.max(8, W * 0.02);
+      sc = Math.max(s, 0.55);
+      skyTop = stacked ? Math.max(80, H - clear + 6) : 96;
+      skyLeft = stacked ? 0 : Math.min(W * 0.6, textRight + 24);
+
+      // the stage for the two symbols: the open sky beside (or below) the text
+      stage = { x0: stacked ? 16 : skyLeft, x1: W - (stacked ? 16 : 36), y0: skyTop };
+      var sw = stage.x1 - stage.x0, sh = HZ - stage.y0, cx = stacked ? W / 2 : stage.x0 + sw * 0.52;
+      sc2 = Math.max(0.7, Math.min(1.15, sw / 520));
+      var dh = Math.min(260, Math.max(120, sh * 0.5 + 20));
+      door = { x: cx, w: dh / 1.6, h: dh, bottom: HZ + 14 };
+      door.d = depthAt(door.bottom);
+      // (in the still frame both symbols show at once, so on narrow screens the staff moves up out of the doorway's way)
+      staff = { x0: stage.x0 + 8, x1: stage.x1 - 8, y: stage.y0 + sh * (stacked ? (reduceMotion ? 0.16 : 0.44) : 0.36), gap: 19 * sc2, A: 11 * sc2, cx: cx };
+
+      canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+      buildStatic();
+      buildRows();
+      buildComets();
+      buildShips();
+      placeCaptions();
+    }
+
+    function placeCaptions() {
+      if (capOpen) { capOpen.style.setProperty('--x', Math.round(door.x) + 'px'); capOpen.style.setProperty('--y', Math.round(door.bottom - door.h - (reduceMotion ? 48 : 58)) + 'px'); }
+      if (capPlay) { capPlay.style.setProperty('--x', Math.round(staff.cx) + 'px'); capPlay.style.setProperty('--y', Math.round(staff.y - staff.gap * 2 - staff.A - 66) + 'px'); }
+      // still frame: both captions on wide screens; on narrow ones the headline alone labels the two symbols
+      if (reduceMotion) { showCap(capOpen, !stacked); showCap(capPlay, !stacked); }
+    }
+
+    function layer(cv) {
+      cv.width = canvas.width; cv.height = canvas.height;
+      var c = cv.getContext('2d');
+      c.setTransform(dpr, 0, 0, dpr, 0, 0);
+      c.clearRect(0, 0, W, H);
+      return c;
+    }
+
+    function buildStatic() {
+      var R = rng(3), c = layer(skyL), i;
+
+      // the sky: faint fixed stars (a few more twinkle in the animation) and a warm city haze on the horizon
+      c.fillStyle = '#f3eee5';
+      for (i = 0; i < 60; i++) { c.globalAlpha = 0.12 + R() * 0.35; c.fillRect(R() * W, R() * (HZ - 160 * s), 1, 1); }
+      c.globalAlpha = 1;
+      stars = [];
+      for (i = 0; i < 26; i++) stars.push({ x: R() * W, y: R() * (HZ - 180 * s), ph: R() * 6.28, r: 0.8 + R() * 0.9 });
+      var g = c.createLinearGradient(0, HZ - 220 * s, 0, HZ);
+      g.addColorStop(0, 'rgba(233,180,76,0)');
+      g.addColorStop(1, 'rgba(233,180,76,.2)');
+      c.fillStyle = g; c.fillRect(0, HZ - 220 * s, W, 220 * s);
+
+      // the city, in front of anything that lights up the sky
+      c = layer(cityL);
+      var k = Math.max(s, 0.45), x = -6;
+      wins = []; blinks = [];
+      while (x < W) {
+        var bw = (12 + R() * 38) * k, bh = (5 + R() * 20) * k;
+        c.fillStyle = R() < 0.5 ? '#0d1a2c' : '#0f1e33';
+        c.fillRect(x, HZ - bh, bw, bh + 1);
+        if (R() < 0.6) {
+          var n = Math.floor(bw / (6 * k));
+          for (var j = 0; j < n; j++) if (R() < 0.3) wins.push({ x: x + 2 + j * 6 * k, y: HZ - bh + 2 + R() * Math.max(1, bh - 5), w: 1.4, a: 0.25 + R() * 0.4, ph: R() * 6.28, c: '#f1cf87' });
+        }
+        x += bw + R() * 3 * k;
+      }
+
+      // port cranes and the bay bridge on the open stretch of shore
+      if (!stacked && ox > 260) {
+        var bridgeOn = ox > 760;
+        var cx0 = bridgeOn ? ox - 300 * s : ox - 200 * s;
+        c.save(); c.translate(0, HZ); c.fillStyle = '#0d1a2c';
+        [0, 72, 140].forEach(function (dx, ci) {
+          c.save(); c.translate(cx0 + dx * s, 0); c.scale(s * (1 - ci * 0.08), s * (1 - ci * 0.08));
+          c.fill(new Path2D(CRANE)); c.restore();
+          blinks.push({ x: cx0 + (dx + 14) * s, y: HZ - 64 * s * (1 - ci * 0.08), ph: ci * 1.7 });
+        });
+        c.restore();
+        if (bridgeOn) drawBridge(c, Math.max(30, ox - 720 * s), Math.min(1, s) * 0.7);
+      }
+
+      // Minato Mirai
+      c.save(); c.translate(ox, HZ); c.scale(s, s);
+      SKY.forEach(function (p) { c.fillStyle = p[1]; c.fill(new Path2D(p[0])); });
+      var sg = c.createLinearGradient(520, 0, 606, -110);
+      sg.addColorStop(0, '#13304f'); sg.addColorStop(1, '#1d4467');
+      c.fillStyle = sg; c.fill(new Path2D(SAIL));
+      c.strokeStyle = 'rgba(142,197,242,.45)'; c.lineWidth = 1.2 / s; c.stroke(new Path2D('M521 0C522 -48 536 -88 552 -110'));
+      c.strokeStyle = '#13233a'; c.lineWidth = 4;
+      c.beginPath(); c.moveTo(WHEEL.x, WHEEL.y); c.lineTo(WHEEL.x - 22, 0); c.moveTo(WHEEL.x, WHEEL.y); c.lineTo(WHEEL.x + 22, 0); c.stroke();
+      c.restore();
+
+      // lit windows on the towers
+      TOWERS.forEach(function (t, ti) {
+        var step = ti < 4 ? 7 : 6;
+        for (var y = -10; y > t.top + 6; y -= step) {
+          var inset = t.taper * (y / t.top);
+          for (var xx = t.x0 + 4 + inset; xx < t.x1 - 4 - inset; xx += 6) {
+            if (R() < (ti === 0 ? 0.3 : 0.22)) wins.push({ x: U(xx), y: V(y), w: Math.max(1, 1.5 * s), a: 0.35 + R() * 0.55, ph: R() * 6.28, c: R() < 0.8 ? '#f1cf87' : '#cfe6ff' });
+          }
+        }
+      });
+      // InterContinental floors
+      for (var fy = -8; fy > -100; fy -= 7) {
+        var span = 1 - Math.abs(fy) / 112;
+        wins.push({ x: U(552 - 30 * span), y: V(fy), w: Math.max(1, 1.2 * s), len: 52 * span * s, a: 0.18, ph: fy, c: '#cfe6ff' });
+      }
+      blinks.push({ x: U(170), y: V(-298), ph: 0.5 });
+
+      // the sea itself
+      var sea = c.createLinearGradient(0, HZ, 0, H);
+      sea.addColorStop(0, '#11294a'); sea.addColorStop(1, '#050b16');
+      c.fillStyle = sea; c.fillRect(0, HZ, W, H - HZ);
+      c.fillStyle = 'rgba(241,207,135,.22)'; c.fillRect(0, HZ, W, 1);   // the waterline
+
+      refl = [
+        { x: U(170), c: '#f1cf87', k: 0.55 },
+        { x: U(278), c: '#f1cf87', k: 0.4 },
+        { x: U(WHEEL.x), multi: true, k: 0.9 },
+        { x: U(560), c: '#cfe6ff', k: 0.45 }
+      ];
+    }
+
+    function drawBridge(c, x0, k) {
+      c.save(); c.translate(x0, HZ);
+      c.fillStyle = '#0d1a2c';
+      c.fillRect(0, -20 * k, 300 * k, 3 * k);
+      [80, 220].forEach(function (tx) {
+        c.fillRect((tx - 6) * k, -70 * k, 3 * k, 70 * k);
+        c.fillRect((tx + 3) * k, -70 * k, 3 * k, 70 * k);
+        c.fillRect((tx - 6) * k, -46 * k, 12 * k, 2 * k);
+        c.strokeStyle = 'rgba(243,238,229,.12)'; c.lineWidth = 0.8;
+        c.beginPath();
+        for (var j = 1; j <= 6; j++) {
+          c.moveTo(tx * k, -68 * k); c.lineTo((tx - j * 11) * k, -20 * k);
+          c.moveTo(tx * k, -68 * k); c.lineTo((tx + j * 11) * k, -20 * k);
+        }
+        c.stroke();
+      });
+      c.fillStyle = '#f1cf87'; c.globalAlpha = 0.5;
+      for (var d = 4; d < 300; d += 9) c.fillRect(d * k, -21.5 * k, 1.3, 1.3);
+      c.globalAlpha = 1;
+      c.restore();
+    }
+
+    function buildRows() {
+      var R = rng(21), n = Math.max(14, Math.min(30, Math.round(seaH / 10.5)));
+      var K = Math.PI * 2 / Math.max(W * 0.5, 280);
+      rows = []; rowFor = [];
+      for (var i = 0; i < n; i++) {
+        var t = (i + 0.6) / n;
+        rows.push({
+          t: t, y0: rowY(t), v: i % 5, K: K * (0.85 + R() * 0.3), ph: R() * 6.283, sp: (R() < 0.5 ? -1 : 1) * (0.25 + R() * 0.45),
+          k2: K * (2.2 + R() * 1.8), ph2: R() * 6.283, sp2: 0.35 + R() * 0.6
+        });
+      }
+      // the row each voice rises from when it becomes a line of the staff
+      for (var v = 0; v < 5; v++) {
+        rowFor[v] = rows.filter(function (r) { return r.v === v; }).sort(function (a, b) { return Math.abs(a.t - 0.45) - Math.abs(b.t - 0.45); })[0];
+      }
+    }
+
+    // A gentle arc from o to p, bowing upwards
+    function bend(o, p, k, n) {
+      var dx = p[0] - o[0], dy = p[1] - o[1], len = Math.sqrt(dx * dx + dy * dy) || 1;
+      var nx = -dy / len, ny = dx / len;
+      if (ny > 0) { nx = -nx; ny = -ny; }
+      var cx = (o[0] + p[0]) / 2 + nx * len * k, cy = (o[1] + p[1]) / 2 + ny * len * k, pts = [];
+      for (var j = 0; j <= n; j++) {
+        var u = j / n, a = (1 - u) * (1 - u), b = 2 * (1 - u) * u, d = u * u;
+        pts.push([a * o[0] + b * cx + d * p[0], a * o[1] + b * cy + d * p[1]]);
+      }
+      return pts;
+    }
+
+    // Five ideas, one per voice, arriving from different directions: through the doorway, into the harbor
+    function buildComets() {
+      var x0 = stage.x0, span = W - x0, y0 = stage.y0;
+      // from the right edge and from high in the sky (kept below the navigation bar)
+      var O = [[W + 40, y0 + 10], [x0 + span * 0.3, y0 - 14], [W + 40, y0 + (HZ - y0) * 0.55], [x0 + span * 0.8, y0 - 14], [stacked ? -40 : x0 - 20, y0 + 30]];
+      var P = [door.x, door.bottom - door.h * 0.38];
+      comets = O.map(function (o, v) {
+        var land = [Math.max(20, Math.min(W - 20, door.x + (v - 2) * door.w * 0.8)), rowY(0.5)];
+        landX[v] = land[0];
+        return bend(o, P, 0.18, 60).concat(bend(P, land, 0.12, 20).slice(1));
+      });
+    }
+
+    function buildShips() {
+      ships = [
+        { def: LINER, d: 0.06, sp: 7, dir: 1, x: W * 0.3, wait: 0 },
+        { def: BOAT, d: 0.46, sp: 24, dir: -1, x: W * 0.72, wait: 0 }
+      ];
+    }
+    function shipScale(sh) { return sc * (0.7 + sh.d * 1.2); }
+
+    /* ---------- Things that happen ---------- */
+    function launch(x, y, v, delay, pitch) {
+      rockets.push({ x0: x + (Math.random() - 0.5) * 40 * sc, x1: x, y1: y, v: v, t0: T + (delay || 0), dur: 0.95 + Math.random() * 0.3, pitch: pitch });
+    }
+
+    function burst(x, y, v, pitch) {
+      var n = lite ? 64 : 124, sp = (lite ? 125 : 178) * sc * (0.85 + Math.random() * 0.3), ringy = Math.random() < 0.3, c = VOICES[v], i;
+      if (sparks.length > 2200) n = 36;
+      for (i = 0; i < n; i++) {
+        var a = (i / n) * 6.283 + Math.random() * 0.1, m = ringy ? 1 : 0.3 + 0.7 * Math.sqrt(Math.random());
+        sparks.push({ x: x, y: y, vx: Math.cos(a) * sp * m, vy: Math.sin(a) * sp * m * 0.92 - 10 * sc, age: 0, life: 1.7 + Math.random() * 1,
+                      c: Math.random() < 0.16 ? '#fff6e0' : c, w: ringy ? 2 : 1.7, tw: 1 + Math.random() * 6 });
+      }
+      // an inner ring in a second voice: every burst is two notes at once
+      var c2 = VOICES[(v + 2) % 5], m2 = lite ? 18 : 32;
+      for (i = 0; i < m2; i++) {
+        var b = (i / m2) * 6.283;
+        sparks.push({ x: x, y: y, vx: Math.cos(b) * sp * 0.45, vy: Math.sin(b) * sp * 0.42, age: 0, life: 1.2 + Math.random() * 0.5, c: c2, w: 1.5, tw: 1 + Math.random() * 6 });
+      }
+      flashes.push({ x: x, y: y, v: v, t0: T });
+      energy[v] = Math.max(energy[v], 0.9);
+      if (pitch && soundOn && actx) tone(pitch, actx.currentTime + 0.01, 2.6, 0.12);
+    }
+
+    function sparkle(x, y, v, n, speed) {
+      for (var i = 0; i < n; i++) {
+        var a = Math.random() * 6.283, m = speed * (0.4 + Math.random() * 0.6);
+        sparks.push({ x: x, y: y, vx: Math.cos(a) * m, vy: Math.sin(a) * m, age: 0, life: 0.6 + Math.random() * 0.4, c: Math.random() < 0.3 ? '#fff6e0' : VOICES[v], w: 1.3, tw: 0 });
+      }
+    }
+
+    // Act 1: an idea goes through the open doorway, then lands in the harbor and wakes its voice
+    function onPass(v) {
+      doorGlow = 1;
+      sparkle(door.x, door.bottom - door.h * 0.38, v, lite ? 10 : 18, 60 * sc2);
+    }
+    function onLand(v) {
+      rings.push({ x: landX[v], y: rowY(0.5), v: v, t0: T, R: 72 * sc, life: 2 });
+      energy[v] = 1;
+      if (soundOn && actx) tone(chordAt(T).scale[v * 2], actx.currentTime + 0.01, 2.2, 0.1);
+    }
+    // Act 2: each idea, now a note, lands on its line of the staff; then the chord
+    function onNote(v) {
+      skyRings.push({ x: staff.cx, y: lineY(v, staff.cx, 0, 0), v: v, t0: T, R: 38 * sc2, life: 1.2 });
+      energy[v] = 1;
+      if (soundOn && actx) tone(NOTES[v], actx.currentTime + 0.01, 3, 0.16);
+    }
+    function onChord() {
+      togetherAt = T; sweepAt = T;
+      for (var i = 0; i < 3; i++) skyRings.push({ x: staff.cx, y: staff.y, v: (i * 2) % 5, t0: T + i * 0.18, R: (110 + i * 40) * sc2, life: 1.8 });
+      var w = staff.x1 - staff.x0, top = stage.y0 + 30;
+      launch(staff.x0 + w * 0.14, Math.max(top, staff.y - 40 * sc2), 1, 0.05);
+      launch(staff.x1 - w * 0.12, Math.max(top, staff.y - 70 * sc2), 3, 0.4);
+      launch(staff.cx + w * 0.2, top + 10, 4, 0.8);
+    }
+    // a chord played elsewhere on the page (the Philosophy section) brings the harbor together too
+    function finale(n, delay) {
+      var x0 = Math.max(stage.x0, ox + 20), x1 = W - 30;
+      var yTop = stage.y0 + 24, yLow = Math.max(yTop + 20, HZ - 250 * s);
+      for (var i = 0; i < n; i++) {
+        var v = (turn + i) % 5;
+        launch(x0 + (x1 - x0) * ((i + 0.5) / n) + (Math.random() - 0.5) * 50, yTop + Math.random() * (yLow - yTop), v, (delay || 0) + i * 0.38, NOTES[v]);
+      }
+      turn += n;
+    }
+
+    function showCap(el, on) { if (el && el._on !== on) { el._on = on; el.classList.toggle('show', on); } }
+
+    function update(dt) {
+      var cyc = Math.floor(T / CYCLE), tc = T - cyc * CYCLE, v;
+      if (cyc !== cycleN) { cycleN = cyc; fired = { pass: [], land: [], note: [], chord: false }; }
+      for (v = 0; v < 5; v++) {
+        var cs = COMET.start + v * COMET.every;
+        if (!fired.pass[v] && tc >= cs + COMET.pass) { fired.pass[v] = true; onPass(v); }
+        if (!fired.land[v] && tc >= cs + COMET.leg) { fired.land[v] = true; onLand(v); }
+        if (!fired.note[v] && tc >= ACT2 + NOTE.start + v * NOTE.every + NOTE.fly) { fired.note[v] = true; onNote(v); }
+      }
+      if (!fired.chord && tc >= ACT2 + CHORD) { fired.chord = true; onChord(); }
+
+      // the headline and the captions follow the acts
+      var act = tc < ACT2 ? 'open' : 'play';
+      if (act !== shownAct) { shownAct = act; hero.setAttribute('data-act', act); }
+      showCap(capOpen, tc > 0.4 && tc < 5.9);
+      showCap(capPlay, tc > ACT2 + 0.3 && tc < ACT2 + FADE + 0.2);
+
+      var chord = chordAt(T), i;
+      var together = T - togetherAt < 3.5;
+      h += ((together ? 1 : chord.h) - h) * Math.min(1, dt * 1.5);
+      chop += ((together ? 0 : chord.chop) - chop) * Math.min(1, dt * 1.5);
+      for (i = 0; i < 5; i++) {
+        kr[i] += (chord.notes[i] / 130.81 - kr[i]) * Math.min(1, dt * 2.6);
+        energy[i] *= Math.pow(0.35, dt);
+      }
+      pe *= Math.pow(0.4, dt);
+      doorGlow *= Math.pow(0.15, dt);
+
+      rings = rings.filter(function (g) { return T - g.t0 < g.life; });
+      skyRings = skyRings.filter(function (g) { return T - g.t0 < g.life; });
+      flashes = flashes.filter(function (f) { return T - f.t0 < 0.9; });
+
+      // fireworks: rockets climb from the water, then burst into sparks that drift, fall and fade
+      rockets = rockets.filter(function (k) {
+        if (T < k.t0) return true;
+        var u = (T - k.t0) / k.dur;
+        if (u >= 1) { burst(k.x1, k.y1, k.v, k.pitch); return false; }
+        var e = easeOut(u);
+        k.x = k.x0 + (k.x1 - k.x0) * e; k.y = HZ + (k.y1 - HZ) * e;
+        if (!lite || Math.random() < 0.5) sparks.push({ x: k.x, y: k.y, vx: (Math.random() - 0.5) * 14, vy: 18 + Math.random() * 12, age: 0, life: 0.55 + Math.random() * 0.3, c: '#f1cf87', w: 1.2, tw: 0 });
+        return true;
+      });
+      var drag = Math.pow(0.3, dt), grav = 38 * sc * dt;
+      for (i = sparks.length - 1; i >= 0; i--) {
+        var p = sparks[i];
+        p.age += dt;
+        if (p.age >= p.life) { sparks[i] = sparks[sparks.length - 1]; sparks.pop(); continue; }
+        p.vx *= drag; p.vy = p.vy * drag + grav;
+        p.x += p.vx * dt; p.y += p.vy * dt;
+      }
+
+      // ships cross the harbor, then come round again after a while
+      ships.forEach(function (sh) {
+        var pad = sh.def.len * shipScale(sh);
+        if (sh.wait > 0) { sh.wait -= dt; if (sh.wait <= 0) sh.x = sh.dir > 0 ? -pad : W + pad; return; }
+        sh.x += sh.dir * sh.sp * shipScale(sh) * dt;
+        if ((sh.dir > 0 && sh.x > W + pad) || (sh.dir < 0 && sh.x < -pad)) sh.wait = 5 + Math.random() * 9;
+      });
+    }
+
+    /* ---------- Drawing ---------- */
+    // still: one frame showing both symbols at once (for people who prefer reduced motion)
+    function draw(still) {
+      var intro = still ? 1 : smooth(T, 0, 2.6), tc = still ? 3 : cycleTime(), i;
+      // act 1: how visible the doorway is, and how far open
+      var dAp = still ? 1 : smooth(tc, 0.1, 0.8) * (1 - smooth(tc, 6.1, 6.7));
+      var dOp = still ? 1 : easeInOut(clamp01((tc - 0.7) / 1.5)) * (1 - smooth(tc, 5.9, 6.5));
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = 1;
+      ctx.clearRect(0, 0, W, H);
+      ctx.drawImage(skyL, 0, 0, W, H);
+
+      ctx.fillStyle = '#f3eee5';
+      for (i = 0; i < stars.length; i++) {
+        var st = stars[i];
+        ctx.globalAlpha = (0.12 + 0.55 * (0.5 + 0.5 * Math.sin(T * 1.1 + st.ph))) * intro;
+        ctx.fillRect(st.x, st.y, st.r, st.r);
+      }
+
+      // fireworks light the sky behind the city
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.globalAlpha = 1;
+      flashes.forEach(function (f) {
+        var a = 1 - (T - f.t0) / 0.9, rad = 340 * sc;
+        var gr = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, rad);
+        gr.addColorStop(0, rgba(VRGB[f.v], 0.3 * a)); gr.addColorStop(0.35, rgba(VRGB[f.v], 0.1 * a)); gr.addColorStop(1, rgba(VRGB[f.v], 0));
+        ctx.fillStyle = gr; ctx.fillRect(f.x - rad, f.y - rad, rad * 2, rad * 2);
+      });
+      ctx.globalCompositeOperation = 'source-over';
+
+      ctx.drawImage(cityL, 0, 0, W, H);
+      drawWindows(intro);
+      drawWheel(intro);
+      drawReflections(intro);
+      drawDoorPath(dOp, dAp);
+      drawSea(intro, function () { drawDoor(dOp, dAp); });
+      drawRings();
+
+      ctx.globalCompositeOperation = 'lighter';
+      if (!still && tc < ACT2 + 0.4) drawComets(tc, dAp);
+      drawStaff(still ? 9 : tc - ACT2, still);
+      drawSkyRings();
+      drawSparks();
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = 1;
+    }
+
+    function drawWindows(intro) {
+      var sw = T - sweepAt, sx = sw < 1.8 ? -80 + (W + 160) * (sw / 1.8) : null;
+      for (var i = 0; i < wins.length; i++) {
+        var w = wins[i];
+        var on = smooth(intro * 1.6 - (w.x / W) * 0.6, 0, 0.4);       // the city switches on, left to right
+        var a = w.a * (0.78 + 0.22 * Math.sin(T * 0.7 + w.ph)) * on;
+        if (sx !== null) a += 0.7 * Math.exp(-Math.pow((w.x - sx) / 70, 2));
+        ctx.globalAlpha = Math.min(1, a);
+        ctx.fillStyle = w.c;
+        ctx.fillRect(w.x, w.y, w.len || w.w, w.w);
+      }
+      blinks.forEach(function (b) {
+        ctx.globalAlpha = (Math.sin(T * 2.2 + b.ph) > 0.6 ? 0.95 : 0.25) * intro;
+        ctx.fillStyle = '#ff5a4a';
+        ctx.beginPath(); ctx.arc(b.x, b.y, Math.max(1, 1.6 * s), 0, 6.283); ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+    }
+
+    function drawWheel(intro) {
+      var cx = U(WHEEL.x), cy = V(WHEEL.y), rr = WHEEL.r * s, ang = T * 0.06, k;
+      ctx.lineWidth = Math.max(0.6, s);
+      ctx.strokeStyle = 'rgba(243,238,229,.12)';
+      ctx.beginPath();
+      for (k = 0; k < 24; k++) {
+        var a = ang + k * Math.PI / 12;
+        ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(a) * rr, cy + Math.sin(a) * rr);
+      }
+      ctx.stroke();
+      ctx.strokeStyle = 'rgba(243,238,229,.3)';
+      ctx.beginPath(); ctx.arc(cx, cy, rr, 0, 6.283); ctx.stroke();
+      // 60 gondolas lit in the five voice colours; the bands chase faster as the voices come together
+      var chase = T * (0.15 + h * 0.5);
+      for (var g = 0; g < 60; g++) {
+        var b = ang + g * Math.PI / 30, v = Math.floor(g / 12 + chase) % 5;
+        ctx.globalAlpha = (0.55 + energy[v] * 0.45) * intro;
+        ctx.fillStyle = VOICES[v];
+        ctx.beginPath(); ctx.arc(cx + Math.cos(b) * rr, cy + Math.sin(b) * rr, Math.max(0.9, 1.7 * s) * (1 + energy[v] * 0.6), 0, 6.283); ctx.fill();
+      }
+      ctx.globalAlpha = 0.8 * intro; ctx.fillStyle = '#f3eee5';
+      ctx.beginPath(); ctx.arc(cx, cy, Math.max(1.5, 4 * s), 0, 6.283); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    function drawReflections(intro) {
+      for (var r = 0; r < refl.length; r++) {
+        var L = refl[r];
+        for (var j = 0; j < 18; j++) {
+          var y = HZ + 3 + j * 3.6 + j * j * 0.5;
+          if (y > H) break;
+          var wv = (5 + j * 1.7) * Math.max(s, 0.5) * (0.5 + 0.5 * Math.sin(T * 1.6 + j * 1.3 + r * 2));
+          ctx.globalAlpha = L.k * (1 - j / 18) * 0.5 * intro;
+          ctx.fillStyle = L.multi ? VOICES[(j + Math.floor(T * 1.2)) % 5] : L.c;
+          ctx.fillRect(L.x - wv / 2 + Math.sin(T + j) * 2, y, wv, 1.5);
+        }
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    // The sea: one line per row, coloured by voice. Each row's wavelength follows its voice's pitch,
+    // so the water changes shape with every chord; on the home chord the rows fall into one shared swell.
+    // Ships and the doorway are drawn in among the rows at their own depth.
+    function drawSea(intro, drawDoorNow) {
+      var step = Math.max(5, W / (lite ? 140 : 200));
+      var kc = Math.PI * 2 / Math.max(W * 0.26, 200);
+      var beat = Math.exp(-((T % BEAT) / BEAT) * 5);                 // the water breathes on every beat
+      var items = ships.map(function (sh) { return { d: sh.d, fn: function () { drawShip(sh); } }; });
+      items.push({ d: door.d, fn: drawDoorNow });
+      items.sort(function (a, b) { return a.d - b.d; });
+      var si = 0;
+      for (var q = 0; q < rows.length; q++) {
+        var row = rows[q];
+        while (si < items.length && items[si].d < row.t) items[si++].fn();
+        var e = energy[row.v], t = row.t;
+        var amp = (0.8 + 11 * Math.pow(t, 1.2)) * (1 + h * 0.45) * (1 + chop * 0.5) * (1 + e * 0.9) * (1 + beat * 0.07);
+        var vis = smooth(intro * 1.4 - t * 0.4, 0, 0.5);              // rows appear from the horizon forwards
+        ctx.globalAlpha = Math.min(1, ((0.2 + 0.6 * t) * (0.7 + 0.45 * h) + e * 0.4) * vis);
+        ctx.strokeStyle = VOICES[row.v];
+        ctx.lineWidth = 0.7 + 1.6 * t + e * 1.2;
+        var k = row.K * kr[row.v], c2 = 0.3 * (1 + chop * 1.3), sp2 = row.sp2 * (1 + chop);
+        ctx.beginPath();
+        for (var x = -10; x <= W + 10; x += step) {
+          var own = 0.7 * Math.sin(k * x + row.sp * T + row.ph) + c2 * Math.sin(row.k2 * x - sp2 * T + row.ph2);
+          var shared = Math.sin(kc * x - 0.7 * T);
+          var bump = pe > 0.01 ? 1 + pe * 1.5 * Math.exp(-Math.pow((x - px) / 150, 2)) : 1;
+          var yy = row.y0 + amp * bump * ((1 - h) * own + h * shared);
+          if (x === -10) ctx.moveTo(x, yy); else ctx.lineTo(x, yy);
+        }
+        ctx.stroke();
+      }
+      while (si < items.length) items[si++].fn();
+      ctx.globalAlpha = 1;
+    }
+
+    function drawShip(sh) {
+      if (sh.wait > 0) return;
+      var k = shipScale(sh), y = rowY(sh.d) + 1, def = sh.def, j;
+      if (def === BOAT) {
+        // wake: two lines spreading out behind the stern
+        var sx = sh.x - sh.dir * 25 * k, ex = sx - sh.dir * 130 * k;
+        var gr = ctx.createLinearGradient(sx, 0, ex, 0);
+        gr.addColorStop(0, 'rgba(207,230,255,.5)'); gr.addColorStop(1, 'rgba(207,230,255,0)');
+        ctx.globalAlpha = 1; ctx.strokeStyle = gr; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(sx, y - 1); ctx.lineTo(ex, y - 6 * k); ctx.moveTo(sx, y); ctx.lineTo(ex, y + 9 * k); ctx.stroke();
+      }
+      ctx.save(); ctx.translate(sh.x, y); ctx.scale(sh.dir * k, k);
+      ctx.globalAlpha = 1;
+      def.body.forEach(function (p) { ctx.fillStyle = p[1]; ctx.fill(p[0]); });
+      if (def.lights) {
+        ctx.fillStyle = '#f1cf87';
+        def.lights.forEach(function (l, i) { ctx.globalAlpha = 0.5 + 0.4 * ((i * 7) % 3) / 2; ctx.fillRect(l[0], l[1], 2, 1.6); });
+      }
+      if (def.band) { ctx.globalAlpha = 0.8; ctx.fillStyle = '#9fd8ff'; ctx.fillRect(def.band[0], def.band[1], def.band[2], def.band[3]); }
+      ctx.globalAlpha = 1; ctx.fillStyle = '#fffaf0'; ctx.fillRect(def.mast[0] - 0.9, def.mast[1] - 0.9, 1.8, 1.8);
+      ctx.fillStyle = def === BOAT ? '#ff5a4a' : '#5af08a'; ctx.fillRect(-18, -4, 1.8, 1.8);
+      ctx.restore();
+      // its lights shimmer on the water below
+      ctx.fillStyle = def === BOAT ? '#9fd8ff' : '#f1cf87';
+      for (j = 0; j < 6; j++) {
+        ctx.globalAlpha = 0.28 * (1 - j / 6);
+        var ww = (def.len * 0.5 - j * 3) * k * (0.6 + 0.4 * Math.sin(T * 2 + j));
+        if (ww > 0) ctx.fillRect(sh.x - ww / 2, y + 2 + j * 2.6 * k, ww, 1);
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    /* ---------- Act 1: the open doorway ---------- */
+    function doorPath(L, R, spring, bot, half) {
+      ctx.moveTo(L, bot); ctx.lineTo(L, spring); ctx.arc((L + R) / 2, spring, half, Math.PI, 0); ctx.lineTo(R, bot);
+    }
+
+    // One leaf of the double door, hinged at hx, swinging open towards us by angle th
+    function leaf(hx, dir, half, spring, bot, th, ap) {
+      var c = Math.cos(th), p = 0.22 * Math.sin(th), fx = hx + dir * half * c, e = (bot - spring) * p * 0.5;
+      var A = [hx, spring], B = [fx, spring - e], C = [fx, bot + e], D = [hx, bot];
+      function P(u, v) {
+        var tx = A[0] + (B[0] - A[0]) * u, ty = A[1] + (B[1] - A[1]) * u, bx = D[0] + (C[0] - D[0]) * u, by = D[1] + (C[1] - D[1]) * u;
+        return [tx + (bx - tx) * v, ty + (by - ty) * v];
+      }
+      ctx.globalAlpha = ap;
+      ctx.fillStyle = 'rgba(12,26,46,.92)';
+      ctx.beginPath(); ctx.moveTo(A[0], A[1]); ctx.lineTo(B[0], B[1]); ctx.lineTo(C[0], C[1]); ctx.lineTo(D[0], D[1]); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = 'rgba(241,207,135,.9)'; ctx.lineWidth = 1.4; ctx.stroke();
+      ctx.strokeStyle = 'rgba(241,207,135,.45)'; ctx.lineWidth = 1;
+      [[0.08, 0.44], [0.54, 0.92]].forEach(function (vv) {
+        var q = [P(0.2, vv[0]), P(0.8, vv[0]), P(0.8, vv[1]), P(0.2, vv[1])];
+        ctx.beginPath(); ctx.moveTo(q[0][0], q[0][1]);
+        for (var i = 1; i < 4; i++) ctx.lineTo(q[i][0], q[i][1]);
+        ctx.closePath(); ctx.stroke();
+      });
+      var hd = P(0.86, 0.5);
+      ctx.fillStyle = '#f1cf87';
+      ctx.beginPath(); ctx.arc(hd[0], hd[1], Math.max(1.4, 2.2 * sc2 * (1 + p)), 0, 6.283); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    function drawDoor(op, ap) {
+      if (ap <= 0.01) return;
+      var D = door, half = D.w / 2, L = D.x - half, R = D.x + half, top = D.bottom - D.h, spring = top + half, bot = D.bottom;
+      var glow = Math.min(1.4, op + doorGlow * 0.6), cy = bot - D.h * 0.38, r;
+
+      // light pours out of the doorway and fans out to the world
+      ctx.globalCompositeOperation = 'lighter';
+      if (op > 0.01) {
+        // the doorway fills with warm light
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = 'rgba(255,226,170,' + (0.3 * op * ap).toFixed(3) + ')';
+        ctx.beginPath(); doorPath(L, R, spring, bot, half); ctx.closePath(); ctx.fill();
+        ctx.globalCompositeOperation = 'lighter';
+        var lg = ctx.createRadialGradient(D.x, cy, 0, D.x, cy, D.h * 0.75);
+        lg.addColorStop(0, 'rgba(255,244,215,' + Math.min(1, 0.95 * glow * ap).toFixed(3) + ')');
+        lg.addColorStop(0.4, 'rgba(241,207,135,' + Math.min(1, 0.5 * glow * ap).toFixed(3) + ')');
+        lg.addColorStop(1, 'rgba(241,207,135,0)');
+        ctx.fillStyle = lg;
+        ctx.beginPath(); doorPath(L, R, spring, bot, half); ctx.closePath(); ctx.fill();
+        // fine rays fanning out to the world
+        ctx.fillStyle = '#f1cf87';
+        for (r = 0; r < 17; r++) {
+          var a = Math.PI + (r + 0.5) * Math.PI / 17 + Math.sin(T * 0.5 + r) * 0.02;
+          var len = D.h * (1 + 0.5 * Math.sin(r * 2.3 + T * 0.8)) * op;
+          ctx.globalAlpha = 0.055 * op * ap;
+          ctx.beginPath();
+          ctx.moveTo(D.x + Math.cos(a) * half * 0.6, cy + Math.sin(a) * half * 0.6);
+          ctx.lineTo(D.x + Math.cos(a - 0.022) * len, cy + Math.sin(a - 0.022) * len);
+          ctx.lineTo(D.x + Math.cos(a + 0.022) * len, cy + Math.sin(a + 0.022) * len);
+          ctx.closePath(); ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+      }
+      ctx.globalCompositeOperation = 'source-over';
+
+      // the two leaves swing open towards us
+      var th = op * 1.32;
+      leaf(L, 1, half, spring, bot, th, ap);
+      leaf(R, -1, half, spring, bot, th, ap);
+
+      // the frame and its arched fanlight
+      ctx.globalAlpha = ap;
+      ctx.strokeStyle = '#f1cf87'; ctx.lineWidth = 2;
+      ctx.beginPath(); doorPath(L, R, spring, bot, half); ctx.stroke();
+      ctx.globalAlpha = ap * 0.6; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(L, spring); ctx.lineTo(R, spring);
+      for (var k = 1; k < 6; k++) { var b = Math.PI + k * Math.PI / 6; ctx.moveTo(D.x, spring); ctx.lineTo(D.x + Math.cos(b) * half, spring + Math.sin(b) * half); }
+      ctx.stroke();
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.globalAlpha = ap * (0.22 + 0.2 * op); ctx.lineWidth = 7; ctx.strokeStyle = '#e9b44c';
+      ctx.beginPath(); doorPath(L, R, spring, bot, half); ctx.stroke();
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = 1;
+    }
+
+    // the doorway's light, broken up on the water in front of it
+    function drawDoorPath(op, ap) {
+      if (op * ap <= 0.01) return;
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.fillStyle = '#f6dca0';
+      for (var j = 0; j < 22; j++) {
+        var y = door.bottom + 3 + j * 4 + j * j * 0.35;
+        if (y > H) break;
+        var w = door.w * (0.55 + j * 0.05) * (0.6 + 0.4 * Math.sin(T * 1.8 + j * 1.7));
+        ctx.globalAlpha = 0.34 * op * ap * (1 - j / 22);
+        ctx.fillRect(door.x - w / 2 + Math.sin(T + j) * 3, y, w, 1.6);
+      }
+      ctx.globalAlpha = 1;
+      ctx.globalCompositeOperation = 'source-over';
+    }
+
+    function at(pts, f) {
+      var i = Math.min(pts.length - 2, Math.max(0, Math.floor(f))), u = f - i;
+      return [pts[i][0] + (pts[i + 1][0] - pts[i][0]) * u, pts[i][1] + (pts[i + 1][1] - pts[i][1]) * u];
+    }
+
+    // the ideas: faint routes in from the edges of the world, and a bright comet on each
+    function drawComets(tc, ap) {
+      ctx.setLineDash([1.5, 7]);
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = '#cfe6ff';
+      ctx.globalAlpha = 0.16 * ap;
+      comets.forEach(function (pts) {
+        ctx.beginPath();
+        for (var i = 0; i <= 60; i++) { if (i) ctx.lineTo(pts[i][0], pts[i][1]); else ctx.moveTo(pts[i][0], pts[i][1]); }
+        ctx.stroke();
+      });
+      ctx.setLineDash([]);
+      for (var v = 0; v < 5; v++) {
+        var age = tc - (COMET.start + v * COMET.every);
+        if (age < 0 || age > COMET.leg) continue;
+        var pts = comets[v], head = easeInOut(age / COMET.leg) * (pts.length - 1), col = VRGB[v], fade = smooth(age, 0, 0.25);
+        ctx.strokeStyle = rgba(col, 1);
+        for (var j = 0; j < 24; j++) {
+          var a1 = head - (j + 1) * 0.5;
+          if (a1 < 0) break;
+          var P0 = at(pts, head - j * 0.5), P1 = at(pts, a1);
+          ctx.globalAlpha = Math.pow(1 - j / 24, 1.6) * 0.95 * fade;
+          ctx.lineWidth = 2.8 * (1 - j / 24) + 0.4;
+          ctx.beginPath(); ctx.moveTo(P0[0], P0[1]); ctx.lineTo(P1[0], P1[1]); ctx.stroke();
+        }
+        var hd = at(pts, head);
+        ctx.globalAlpha = fade;
+        ctx.fillStyle = rgba(col, 0.28); ctx.beginPath(); ctx.arc(hd[0], hd[1], 8 * sc2, 0, 6.283); ctx.fill();
+        ctx.fillStyle = '#fffaf0'; ctx.beginPath(); ctx.arc(hd[0], hd[1], 2.2, 0, 6.283); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    /* ---------- Act 2: many voices, one chord ---------- */
+    // y of voice v's line of the staff at x: a staff shaped like a wave, which rings after the chord
+    function lineY(v, x, ring, beat) {
+      var u = clamp01((x - staff.x0) / (staff.x1 - staff.x0));
+      var y = staff.y + (2 - v) * staff.gap + staff.A * Math.sin(u * 6.283 * 1.15 + T * 0.5);
+      if (ring || beat) y += (ring * 2.6 + beat * 0.6) * sc2 * Math.sin(x * 0.09 - T * 16 + v * 1.3) * Math.sin(Math.PI * u);
+      return y;
+    }
+
+    function noteHead(x, y, v, a, glow) {
+      var rx = 10 * sc2, ry = 7 * sc2;
+      ctx.globalAlpha = a * (0.2 + glow * 0.4);
+      ctx.fillStyle = rgba(VRGB[v], 0.5);
+      ctx.beginPath(); ctx.ellipse(x, y, rx * 1.8, ry * 1.6, -0.35, 0, 6.283); ctx.fill();
+      ctx.globalAlpha = a;
+      ctx.fillStyle = VOICES[v];
+      ctx.beginPath(); ctx.ellipse(x, y, rx, ry, -0.35, 0, 6.283); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,.6)';
+      ctx.beginPath(); ctx.ellipse(x - rx * 0.3, y - ry * 0.35, rx * 0.32, ry * 0.22, -0.35, 0, 6.283); ctx.fill();
+    }
+
+    function drawStaff(tc2, still) {
+      if (tc2 < 0) return;
+      var gone = still ? 0 : smooth(tc2, FADE, FADE + 0.7), fade = 1 - gone, sink = gone * 24;
+      if (fade <= 0) return;
+      var ring = tc2 > CHORD ? Math.exp(-(tc2 - CHORD) * 1.4) : 0;
+      var beat = still ? 0 : Math.exp(-((T % BEAT) / BEAT) * 5) * (tc2 > CHORD ? 1 : 0);
+      var x0 = staff.x0, x1 = staff.x1, step = Math.max(5, (x1 - x0) / 90), v, x;
+
+      // the five voices rise out of the sea and become the five lines of a staff
+      for (v = 4; v >= 0; v--) {
+        var rise = still ? 1 : easeInOut(clamp01((tc2 - v * 0.08) / 1.2));
+        if (rise <= 0) continue;
+        var from0 = rowFor[v] ? rowFor[v].y0 : rowY(0.5), c = VRGB[v], al = 0.9 * fade * Math.min(1, rise * 1.6);
+        var g = ctx.createLinearGradient(x0, 0, x1, 0);
+        g.addColorStop(0, rgba(c, 0)); g.addColorStop(0.1, rgba(c, al)); g.addColorStop(0.9, rgba(c, al)); g.addColorStop(1, rgba(c, 0));
+        ctx.strokeStyle = g;
+        ctx.beginPath();
+        for (x = x0; x <= x1 + 0.5; x += step) {
+          var target = lineY(v, x, ring, beat) + sink, from = from0 + 6 * Math.sin(x * 0.02 + T);
+          var y = from + (target - from) * rise;
+          if (x === x0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.globalAlpha = 0.28; ctx.lineWidth = 6; ctx.stroke();
+        ctx.globalAlpha = 1; ctx.lineWidth = 2; ctx.stroke();
+      }
+
+      // each idea, now a note, flies up from where it landed and settles on its own line: a chord
+      var cx = staff.cx, lastLand = NOTE.start + 4 * NOTE.every + NOTE.fly;
+      for (v = 0; v < 5; v++) {
+        var u = still ? 1 : clamp01((tc2 - (NOTE.start + v * NOTE.every)) / NOTE.fly);
+        if (u <= 0) continue;
+        var tx = cx, ty = lineY(v, cx, ring, beat) + sink, fx = landX[v], fy = rowY(0.5);
+        var mx = (fx + tx) / 2 + (v - 2) * 24 * sc2, my = Math.min(fy, ty) - 70 * sc2;
+        var pos = function (e) { return [(1 - e) * (1 - e) * fx + 2 * (1 - e) * e * mx + e * e * tx, (1 - e) * (1 - e) * fy + 2 * (1 - e) * e * my + e * e * ty]; };
+        if (u < 1) {
+          for (var j = 1; j <= 10; j++) {
+            var tp = pos(easeInOut(clamp01(u - j * 0.03)));
+            ctx.globalAlpha = 0.5 * (1 - j / 10) * fade; ctx.fillStyle = VOICES[v];
+            ctx.beginPath(); ctx.arc(tp[0], tp[1], (3.2 - j * 0.22) * sc2, 0, 6.283); ctx.fill();
+          }
+        }
+        var hp = pos(easeInOut(u));
+        noteHead(hp[0], hp[1], v, fade * Math.min(1, u * 3), u >= 1 ? energy[v] + ring * 0.6 + beat * 0.3 : 0.4);
+      }
+      // the stem joins them into a single chord
+      if (still || tc2 > lastLand) {
+        var sp = still ? 1 : easeOut(clamp01((tc2 - lastLand) / 0.4));
+        // stem down on the left, as written for notes this high on the staff (and clear of the caption above)
+        var ys = lineY(4, cx, ring, beat) + sink, ye = lineY(0, cx, ring, beat) + sink + staff.gap * (still ? 1.2 : 2.4), sx = cx - 9.2 * sc2;
+        ctx.globalAlpha = 0.95 * fade; ctx.strokeStyle = '#f3eee5'; ctx.lineWidth = 2.2;
+        ctx.beginPath(); ctx.moveTo(sx, ys + 1); ctx.lineTo(sx, ys + (ye - ys) * sp); ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    function drawSkyRings() {
+      ctx.lineWidth = 1.4;
+      skyRings.forEach(function (g) {
+        if (T < g.t0) return;
+        var u = (T - g.t0) / g.life;
+        ctx.globalAlpha = Math.pow(1 - u, 1.5) * 0.6; ctx.strokeStyle = VOICES[g.v];
+        ctx.beginPath(); ctx.arc(g.x, g.y, g.R * easeOut(u), 0, 6.283); ctx.stroke();
+      });
+      ctx.globalAlpha = 1;
+    }
+
+    function drawRings() {
+      ctx.lineWidth = 1.2;
+      rings.forEach(function (g) {
+        var u = (T - g.t0) / g.life, r = g.R * easeOut(u), sq = 0.14 + 0.24 * depthAt(g.y), a = Math.pow(1 - u, 1.6) * (g.soft ? 0.35 : 0.75);
+        ctx.strokeStyle = VOICES[g.v];
+        ctx.globalAlpha = a; ctx.beginPath(); ctx.ellipse(g.x, g.y, r, r * sq, 0, 0, 6.283); ctx.stroke();
+        ctx.globalAlpha = a * 0.55; ctx.beginPath(); ctx.ellipse(g.x, g.y, r * 0.6, r * 0.6 * sq, 0, 0, 6.283); ctx.stroke();
+      });
+      ctx.globalAlpha = 1;
+    }
+
+    function drawSparks() {
+      for (var i = 0; i < sparks.length; i++) {
+        var p = sparks[i], u = p.age / p.life, a = Math.pow(1 - u, 1.4);
+        if (u > 0.55 && p.tw) a *= 0.5 + 0.5 * Math.sin(p.age * 40 + p.tw);   // a twinkle as they die out
+        var tx = p.x - p.vx * 0.09, ty = p.y - p.vy * 0.09;                    // a streak along the direction of travel
+        ctx.strokeStyle = p.c;
+        if (!lite) { ctx.globalAlpha = a * 0.2; ctx.lineWidth = p.w * 3.2; ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(p.x, p.y); ctx.stroke(); }
+        ctx.globalAlpha = a; ctx.lineWidth = p.w;
+        ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(p.x, p.y); ctx.stroke();
+        if (p.y < HZ) {
+          // and again, broken up, in the water
+          var ry = HZ + (HZ - p.y) * 0.4;
+          if (ry < H) { ctx.globalAlpha = a * 0.22; ctx.fillStyle = p.c; ctx.fillRect(p.x - 1.5 + Math.sin(ry * 0.2 + T * 3) * 2, ry, 3, 1); }
+        }
+      }
+      ctx.fillStyle = '#fff3d6';
+      rockets.forEach(function (k) {
+        if (T < k.t0 || k.x === undefined) return;
+        ctx.globalAlpha = 1; ctx.beginPath(); ctx.arc(k.x, k.y, 1.6, 0, 6.283); ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+    }
+
+    // The little scope in "Now playing": the five voices of the current chord added together
+    function drawScope() {
+      if (!sctx) return;
+      var w = scope.width, hh = scope.height;
+      sctx.clearRect(0, 0, w, hh);
+      sctx.strokeStyle = 'rgba(243,238,229,.12)'; sctx.lineWidth = 1;
+      sctx.beginPath(); sctx.moveTo(0, hh / 2); sctx.lineTo(w, hh / 2); sctx.stroke();
+      var amp = (soundOn ? 0.5 : 0.32) * hh;
+      sctx.strokeStyle = soundOn ? '#f1cf87' : 'rgba(241,207,135,.75)'; sctx.lineWidth = 2;
+      sctx.beginPath();
+      for (var x = 0; x <= w; x += 2) {
+        var y = 0;
+        for (var i = 0; i < 5; i++) y += Math.sin(kr[i] * (x / w) * 6.283 * 2.5 + T * kr[i] * 3);
+        y = Math.max(2, Math.min(hh - 2, hh / 2 + (y / 5) * amp));
+        if (x) sctx.lineTo(x, y); else sctx.moveTo(x, y);
+      }
+      sctx.stroke();
+    }
+
+    function ui() {
+      var chip = chordAt(T).chip, bt = Math.floor(T / BEAT);
+      if (chip !== shownChip) { shownChip = chip; chips.forEach(function (c, i) { c.classList.toggle('on', i === chip); }); }
+      if (bt !== lastBeat && beatDot) { lastBeat = bt; beatDot.classList.remove('on'); void beatDot.offsetWidth; beatDot.classList.add('on'); }
+    }
+
+    /* ---------- Music for the hero: bass, comping and a ride cymbal, scheduled ahead on the same clock ---------- */
+    function syncAudio() { aOff = actx.currentTime - clock(); nextBeat = Math.ceil(clock() / BEAT); }
+    function schedule() {
+      if (!soundOn || !actx || frozen) return;
+      var now = clock();
+      if (reduceMotion) { T = now; ui(); }   // no animation loop: keep the chord panel moving with the music
+      while (nextBeat * BEAT < now + 0.3) { playBeat(nextBeat, nextBeat * BEAT + aOff); nextBeat++; }
+    }
+    function playBeat(n, when) {
+      if (when < actx.currentTime - 0.05) return;   // fell behind (the tab was asleep): skip rather than pile up
+      var b = n % 4, bar = Math.floor(n / 4) % 4, ch = PROG[bar], i;
+      if (b === 0) {
+        bass(ch.bass[0], when, 0.55);
+        for (i = 1; i < 5; i++) tone(ch.notes[i], when + i * 0.012, 2.6, bar === 3 ? 0.06 : 0.1);
+      }
+      if (b === 2) bass(ch.bass[1], when, 0.45);
+      if (b === 1 && bar < 2) for (i = 1; i < 5; i++) tone(ch.notes[i], when + BEAT * 0.66, 0.5, 0.055);   // a stab on the "and" of two
+      ride(when, b % 2 ? 0.05 : 0.035);
+      if (b % 2) ride(when + BEAT * 0.66, 0.025);                                                          // the swung skip beat
+    }
+    if (soundBtn) soundBtn.addEventListener('click', function () {
+      soundOn = !soundOn;
+      if (soundOn && !audio()) soundOn = false;
+      soundBtn.setAttribute('aria-pressed', String(soundOn));
+      clearInterval(timer);
+      if (soundOn) { syncAudio(); timer = setInterval(schedule, 50); schedule(); }
+    });
+
+    /* ---------- Running ---------- */
+    function loop() {
+      var nt = clock(), dt = Math.min(0.05, Math.max(0, nt - T));
+      T = nt;
+      update(dt);
+      draw(false);
+      drawScope();
+      ui();
+      if (running) raf = requestAnimationFrame(loop);
+    }
+    function start() {
+      if (running) return;
+      if (frozen) { held += performance.now() - heldAt; frozen = false; }
+      if (soundOn && actx) syncAudio();
+      running = true;
+      raf = requestAnimationFrame(loop);
+    }
+    function stop() {
+      if (!running) return;
+      running = false;
+      cancelAnimationFrame(raf);
+      frozen = true; heldAt = performance.now();
+    }
+
+    heroTogether = function () { if (running) { togetherAt = T; finale(5, 0.25); } };
+
+    function shiftY() { return reduceMotion ? 0 : Math.min(window.scrollY, H) * 0.32; }   // matches the canvas parallax
+
+    layout();
+    if (reduceMotion) {
+      // one still frame with both symbols: the open doorway, and the chord on the staff
+      hero.setAttribute('data-act', 'both');
+      T = BAR * 2.9; h = CM9.h; chop = 0;
+      kr = CM9.notes.map(function (f) { return f / 130.81; });
+      draw(true); drawScope(); ui();
+    } else {
+      start();
+      var visible = true;
+      var check = function () { if (visible && !document.hidden) start(); else stop(); };
+      if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; check(); }).observe(hero);
+      document.addEventListener('visibilitychange', check);
+
+      // the water answers the pointer
+      hero.addEventListener('pointermove', function (e) {
+        var r = hero.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top - shiftY();
+        if (y < HZ) return;
+        px = x; pe = Math.min(1, pe + 0.12);
+        if (T - lastRing > 0.12) { lastRing = T; rings.push({ x: x, y: y, v: voiceAt(y), t0: T, R: 30 * sc, life: 1.4, soft: true }); }
+      }, { passive: true });
+
+      // parallax as the page scrolls away
+      var pyRaf = 0;
+      window.addEventListener('scroll', function () {
+        if (pyRaf) return;
+        pyRaf = requestAnimationFrame(function () { pyRaf = 0; hero.style.setProperty('--py', Math.round(Math.min(window.scrollY, H || 1000))); });
+      }, { passive: true });
+    }
+
+    // Tap the harbor: a firework goes up, and with sound on you hear a note that fits the chord being played
+    hero.addEventListener('click', function (e) {
+      if (e.target.closest('a, button, .hero-copy, .jam')) return;
+      var r = hero.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top - shiftY();
+      var v = turn++ % 5, notes = chordAt(T).scale;
+      if (soundOn && actx) tone(notes[Math.max(0, Math.min(notes.length - 1, Math.floor((x / W) * notes.length)))], actx.currentTime + 0.01, 2.2, 0.2);
+      if (reduceMotion) return;
+      if (y > HZ) rings.push({ x: x, y: y, v: v, t0: T, R: 64 * sc, life: 2 });
+      launch(x, y < HZ - 40 * sc ? Math.max(skyTop, y) : Math.max(skyTop + 20, HZ - (150 + Math.random() * 130) * sc), v, 0, null);
+      energy[v] = 1;
+    });
+
+    var pending = 0;
+    function relayout() {
+      cancelAnimationFrame(pending);
+      pending = requestAnimationFrame(function () { layout(); if (!running) { draw(reduceMotion); drawScope(); } });
+    }
+    if ('ResizeObserver' in window) new ResizeObserver(relayout).observe(hero);
+    else window.addEventListener('resize', relayout);
+    document.addEventListener('langchange', relayout);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);
+  })();
+
+  /* ==========================================================
+     Contact: the email address and the booking calendar
+     ========================================================== */
+  document.querySelectorAll('[data-contact-email]').forEach(function (a) {
+    a.href = 'mailto:' + CONTACT_CONFIG.toEmail;
+    a.textContent = CONTACT_CONFIG.toEmail;
+  });
+  document.querySelectorAll('[data-calendly-link]').forEach(function (a) { a.href = CONTACT_CONFIG.calendlyUrl; });
+
+  /* ---------- Calendly booking (loaded only when the section comes near the screen) ---------- */
+  (function () {
+    var embed = document.getElementById('calendlyEmbed');
+    if (!embed) return;
+    var started = false;
+    // Let the calendar take the height it needs, so it never scrolls inside its own box
+    window.addEventListener('message', function (e) {
+      if (!/^https:\/\/([a-z0-9-]+\.)?calendly\.com$/.test(e.origin)) return;
+      if (!e.data || e.data.event !== 'calendly.page_height') return;
+      var hgt = parseInt(e.data.payload && e.data.payload.height, 10);
+      if (hgt > 300) embed.style.height = hgt + 'px';
+    });
+    function load() {
+      if (started) return;
+      started = true;
+      var s = document.createElement('script');
+      s.src = 'https://assets.calendly.com/assets/external/widget.js';
+      s.async = true;
+      s.onload = function () {
+        if (!window.Calendly) return;
+        embed.innerHTML = '';
+        window.Calendly.initInlineWidget({
+          url: CONTACT_CONFIG.calendlyUrl + '?hide_gdpr_banner=1&background_color=fffdf8&text_color=132033&primary_color=1f5f8b',
+          parentElement: embed
+        });
+      };
+      document.head.appendChild(s);
+    }
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        if (entries.some(function (e) { return e.isIntersecting; })) { io.disconnect(); load(); }
+      }, { rootMargin: '800px 0px' });
+      io.observe(embed);
+    } else {
+      load();
+    }
+  })();
+})();
+</script>
+</body>
+</html>
